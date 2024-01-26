@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="columnar.css">
+    <title>Columnar Calculator</title>
+</head>
+
+<body>
+    <header class="header-img">
+        <img src="../images/header5.png" alt="">
+
+    </header>
+
+    <header class="header-nav">
+        <div class="navigation">
+            <ul>
+                <li><a href="../index.html">back</a></li>
+
+            </ul>
+        </div>
+        <h2>Columnar Transposition Cipher Calculator</h2>
+        <div></div>
+
+    </header>
+
+    <!-- COLUMNAR CODE -->
+    <div class="main-container">
+
+
+            <section style="width: 87%; margin-top: 30px;">
+                <div class="tool">
+                    <div>
+                        <div>
+                            <p style="color: white;">Enter Plaintext *</p>
+                            <div>
+                            <textarea style="width: 100%; resize: none; padding:5px;" rows="4" id="srcText" oninput="updateTexts()" spellcheck="false" placeholder="Enter message here..."></textarea>
+                            </div>
+                        </div>
+
+                        <div>
+                            <p style="color: white;">Enter Keyword *</p>
+                            <input style="width: 100%; padding:5px;" id="key1" value="" type="text" maxlength="18" oninput="updateTexts()" placeholder="Enter keyword here..." />
+                        </div>
+                        <p id="language"></p>
+                    </div>
+
+                    <div id="changeContent">
+                        <div id="gridwrapper">
+                            <hr style="margin: 40px 0px 40px 0px;"/>
+                            <h3 id="gridHeader" style="color: white;">Grid View Guidance</h3>
+                            <p style="font-size: 16px; padding-left: 10px; display: block; color: white;" id="gridLabel">- Enter keyword, and click decode or encode to show.</p>
+                            <pre id="grid1" style="font-family: 'Poppins', sans-serif; font-size: 16px; padding-left: 10px; display: block;"></pre>
+                            <pre id="grid2" style="font-family: 'Poppins', sans-serif; font-size: 16px; padding-left: 10px; display: none;"></pre>
+                            <pre id="grid3" style="font-family: 'Poppins', sans-serif; font-size: 16px; padding-left: 10px; display: none;"></pre>
+                            <div style="display: none; font-size: 16px; padding-left: 10px; padding-top: 20px;" id="instruction">
+                            <p style="line-height: 0.5;">&#8226; In<span style="color: white;"> BY ORDER</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: white">- it shows how each character of the KEYWORD is being assigned in ascending order based on the Alphabet.</span></p>
+                            <p style="line-height: 1.5;">&#8226; In<span style="color: white;"> KEYWORD</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: white">- it shows how the KEYWORD is being written out with an assigned order on top for guidance to get the ciphertext.</span></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <p style="margin-top: 30px;">
+                    <button style="padding: 8px 14px 8px 14px; border: 1px double black; border-radius: 4px;" onclick="encodeClick();" id="buttonEncrypt">Encrypt</button>
+                    <button style="padding: 8px 14px 8px 14px; border: 1px solid black; border-radius: 4px;  margin-left: 5px;" onclick="decodeClick();" id="buttonDecrypt">Decrypt</button>
+                    <button style="margin-left: 50px; padding: 8px 14px 8px 14px; border: 1px solid black; border-radius: 4px;" onclick="clearText();" id="buttonCancel">Clear</button>
+                    <sup style="padding-left: 630px; color: white;">By Level:</sup>
+                    <button style="margin-left: 5px; padding: 8px 14px 8px 14px; border-radius: 4px;" id="button1" disabled>1</button>
+                    <button style="padding: 8px 14px 8px 14px; border-radius: 4px;" id="button2" disabled>2</button>
+                    <button style="padding: 8px 14px 8px 14px; border-radius: 4px;" id="button3" disabled>3</button>
+                    <sup style="padding-left: 710px; font-size: 12px; font-style: italic; color: white;">- Each button shows how the plaintext being converted on each level</sup>
+                    </p>
+                    <hr style="margin: 40px 0px 20px 0px;"/>
+
+                    <div>
+                        <div style="width: 100%;">
+                            <div id="bylevel" style=" display: none; font-size: 16px; padding-left: 10px; padding-bottom: 20px;">
+                                <p><span style="color: white;">TAKE NOTE:</span> There is a feature for this tool with 1-3 levels.</p><br>
+                                <p style="line-height: 0.5;">&#8226; In<span style="color: white;"> LEVEL 1</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: white">- this level uses an ordinary process behavior to get the ciphertext.</span></p><br>
+                                <p style="line-height: 0.5;">&#8226; In<span style="color: white;"> LEVEL 2</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: white">- this level uses the ciphertext from the 1st level as its plaintext and then proceeds to the process.</span></p><br>
+                                <p style="line-height: 0.5;">&#8226; In<span style="color: white;"> LEVEL 3</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: white">- this level uses the ciphertext from the 2nd level as its plaintext and then proceeds to the process.</span></p>
+                            </div>
+                            <label id="resultLabel1" style="display: block;" for="resultText1"></label>
+                            <textarea style="width: 100%; resize: none; padding: 5px; display: none" rows="4" id="resultText1" spellcheck="false" readonly="true" oninput="checkResult()"></textarea>
+                            <label id="resultLabel2" style="display: none; padding-top: 20px;" for="resultText2"></label>
+                            <textarea style="width: 100%; resize: none; padding: 5px; display: none" rows="4" id="resultText2" spellcheck="false" readonly="true"></textarea>
+                            <label id="resultLabel3" style="display: none; padding-top: 20px;" for="resultText3"></label>
+                            <textarea style="width: 100%; resize: none; padding: 5px; display: none" rows="4" id="resultText3" spellcheck="false" readonly="true"></textarea>
+                        </div>
+                    </div>
+
+                    <div id="result" style="display: flex;">
+                        <p id="resultBox"></p>
+                    </div>
+                </div>
+
+
+            </section>
+
+    </div>
+
+    <div class="main-container" style="margin-bottom: 150px;">
+        <fieldset class="main1">
+        <legend class="title" style="color: white;">Step-by-step process</legend>
+        <!-- <header>
+            <div>
+            <div style="text-align: center;">
+                <div class="user-container">
+                    <div class="user-icon"><img src="C:\Users\HP\Desktop\ayaw e delete\dodong.jpg" alt="Kian"></div>
+                    <div class="user-name">&#8226; Kian Maverick A. Alferez</div>
+                    <div class="user-icon"><img src="C:\Users\HP\Desktop\ayaw e delete\dodong.jpg" alt="James"></div>
+                    <div class="user-name">&#8226; James Irvin C. Villafuerte</div>
+                    <div class="user-icon"><img src="C:\Users\HP\Desktop\ayaw e delete\dodong.jpg" alt="Ann"></div>
+                    <div class="user-name">&#8226; Jhay Ann Berdusola</div>
+                    <div class="user-icon"><img src="C:\Users\HP\Desktop\ayaw e delete\dodong.jpg" alt="Noemi"></div>
+                    <div class="user-name">&#8226; Noemi Jane Gecera</div>
+                    <div class="user-icon"><img src="C:\Users\HP\Desktop\ayaw e delete\dodong.jpg" alt="Desiree"></div>
+                    <div class="user-name">&#8226; Desiree S. Famulagan</div>
+                </div>
+            </div>
+
+            <div class="section-header">
+                <h2 style="margin-left: 20px">Introduction</h2>
+                    <p class="info" style="margin-left: 50px"><span style="color:orange">Columnar Transposition Cipher</span> is a form of transposition cipher in which plain text represent in matrix form that.
+                    It involves writing the plaintext out in rows, and then reading the ciphertext off in columns one by one.</p>
+                    <p class="info" style="margin-left: 50px">It doesn't have a single identifiable origin.
+                    But It was first introduced in the 19th century. Most researchers concluded that it was evolved from various cryptographic techniques and practices during on that said century. </p>
+                    <p class="info" style="margin-left: 50px">It played a role in the history of cryptography and was used for secure communication during specific historical periods such as World War I and 2.</p>
+            </div>
+            </div>
+        </header> -->
+
+        <header>
+            <div class="section-header">
+                <h2 style="margin-left: 20px; color: white;">Step-by-step Encryption and Decryption Process</h2>
+                <div style="margin-left: 40px;">
+                    <h3 style="color: white;">For Encryption Process:</h3>
+                    <ol>
+                        <li><p style="color:white">The width of the rows and the permutation of the columns are usually defined by a keyword.</p></li>
+                        <li><p style="color:white">The keyword consists of the number of letters in the keyword to define the length of the row, and the permutation is determined by the alphabetical order of the letters in the keyword.</p></li>
+                        <li><p style="color:white">The message (plain text) is written out in rows of a fixed length.</p></li>
+                        <li><p style="color:white">Any spare spaces are filled with nulls or left blank or replaced by a character, usually a hyphen ( - ).</p></li>
+                        <li><p style="color:white">Finally, the message is read off in columns, following the order specified by the keyword.</p></li>
+                    </ol>
+                </div>
+
+                <div style="margin-left: 40px;">
+                <h3 style="color: white;">For Decryption Process:</h3>
+                <ol>
+                    <li><p style="color:white">To decipher it, the recipient has to determine the column lengths by dividing the message length by the keyword length.</p></li>
+                    <li><p style="color:white">Finally, write the ciphertext in columns again, then reorder the columns by reforming the keyword. Any spare spaces are filled with nulls or left blank or replaced by a character, usually a hyphen ( - ). Read the matrix rows wisely to get the message.</p></li>
+                </ol>
+                </div>
+            </div>
+        </header>
+        </fieldset>
+    </div>
+
+
+
+
+    <footer>
+        <p>&copy; 2024 Junard Villahermosa & Martin Beldeniza. All rights reserved.</p>
+    </footer>
+
+    <!-- JAVASCRIPT CODE -->
+    <script>
+        var clickOne = document.getElementById("button1");
+        var clickTwo = document.getElementById("button2");
+        var clickThree = document.getElementById("button3");
+        var resultE = document.getElementById("buttonEncrypt");
+        var resultD = document.getElementById("buttonDecrypt");
+
+        resultE.addEventListener("click", function() {
+            var notEmpty = document.getElementById("srcText").value.length;
+            if(notEmpty != 0)
+            {
+                    clickOne.style.border= 'transparent';
+                    clickTwo.style.border= 'transparent';
+                    clickThree.style.border= 'transparent';
+                    checkResult();
+            }
+            else
+            {
+                    clickOne.style.border= 'transparent';
+                    clickTwo.style.border= 'transparent';
+                    clickThree.style.border= 'transparent';
+                    clickOne.disabled = true;
+                    clickTwo.disabled = true;
+                    clickThree.disabled = true;
+            }
+        });
+
+        resultD.addEventListener("click", function() {
+            var notEmpty = document.getElementById("srcText").value.length;
+            if(notEmpty != 0)
+            {
+            checkResult();
+            }
+            else
+            {
+                clickOne.style.border= 'transparent';
+                clickTwo.style.border= 'transparent';
+                clickThree.style.border= 'transparent';
+                clickOne.disabled = true;
+                clickTwo.disabled = true;
+                clickThree.disabled = true;
+            }
+        });
+
+        function checkResult() {
+            clickOne.disabled = false;
+            clickTwo.disabled = false;
+            clickThree.disabled = false;
+            clickOne.style.backgroundColor = 'lightgray';
+            clickOne.style.border= '2px solid #0fa';
+            clickTwo.style.border= '1px solid black';
+            clickThree.style.border= '1px solid black';
+        }
+
+        var DecryptMode = true;
+        var KeepAllCharacters = false;
+
+        function encodeClick() {
+            if (!checkText() || !checkKey())
+                return;
+            var output = document.getElementById('resultText1');
+            document.getElementById('resultLabel1').innerHTML = 'Encrypted Ciphertext (<span style="color: orange;">1st Level</span>):';
+            document.getElementById('gridHeader').innerText = 'Grid: Encryption\n: One Level';
+            showElement('result');
+            hideElement('resultBox');
+            scrollTo('result');
+            DecryptMode = false;
+            updateTexts();
+            output.style.display = 'block';
+            document.getElementById('grid1').style.display = "block";
+            var encrypt = document.getElementById('buttonEncrypt');
+            var decrypt = document.getElementById('buttonDecrypt');
+            encrypt.style.backgroundColor = 'lightgray';
+            encrypt.style.border= '2px solid #0fa';
+            encrypt.style.borderRadius= '4px';
+            decrypt.style.backgroundColor = 'white';
+            decrypt.style.border= '1px solid black';
+            document.getElementById('resultLabel1').style.display = "block";
+            clickTwo.style.backgroundColor = 'white';
+            clickThree.style.backgroundColor = 'white';
+            document.getElementById('grid2').style.display = 'none';
+            document.getElementById('resultText2').style.display = 'none';
+            document.getElementById('grid3').style.display = 'none';
+            document.getElementById('resultText3').style.display = 'none';
+            document.getElementById('resultLabel2').style.display = 'none';
+            document.getElementById('resultLabel3').style.display = 'none';
+            document.getElementById('instruction').style.display = 'block';
+            document.getElementById('bylevel').style.display = 'block';
+        }
+
+        function decodeClick() {
+            if (!checkText() || !checkKey())
+                return;
+            var output = document.getElementById('resultText1');
+            document.getElementById('resultLabel1').innerHTML = 'Decrypted Ciphertext (<span style="color: orange;">1st Level</span>):';
+            document.getElementById('gridHeader').innerText = 'Grid: Decryption\n: One Level';
+            showElement('result');
+            showElement('resultBox');
+            scrollTo('result');
+            DecryptMode = true;
+            updateTexts();
+            output.style.display = 'block';
+            document.getElementById('grid1').style.display = "block";
+            var decrypt = document.getElementById('buttonDecrypt');
+            var encrypt = document.getElementById('buttonEncrypt');
+            decrypt.style.backgroundColor = 'lightgray';
+            decrypt.style.border= '2px solid #0fa';
+            decrypt.style.borderRadius= '4px';
+            encrypt.style.backgroundColor = 'white';
+            encrypt.style.border= '1px solid black';
+            document.getElementById('resultLabel1').style.display = "block";
+            clickTwo.style.backgroundColor = 'white';
+            clickThree.style.backgroundColor = 'white';
+            document.getElementById('grid2').style.display = 'none';
+            document.getElementById('resultText2').style.display = 'none';
+            document.getElementById('grid3').style.display = 'none';
+            document.getElementById('resultText3').style.display = 'none';
+            document.getElementById('resultLabel2').style.display = 'none';
+            document.getElementById('resultLabel3').style.display = 'none';
+            document.getElementById('instruction').style.display = 'block';
+            document.getElementById('bylevel').style.display = 'block';
+        }
+
+        function showElement(id) {
+            document.getElementById(id).classList.remove('collapse');
+        }
+
+        function hideElement(id) {
+            document.getElementById(id).classList.add('collapse');
+        }
+
+        function toggleElement(id) {
+            if (document.getElementById(id).classList.contains('collapse'))
+                showElement(id);
+            else
+                hideElement(id);
+        }
+
+        function scrollTo(id) {
+            document.getElementById(id).scrollIntoView({ behavior: "smooth" });
+        }
+
+        function checkText() {
+            if (document.getElementById('srcText').value.length === 0 && document.getElementById('key1').value.length === 0  ) {
+                document.getElementById('srcText').classList.add('is-invalid');
+                document.getElementById('gridHeader').innerText = 'Grid View Guidance';
+                document.getElementById('gridLabel').innerText = '- Enter keyword, and click decode or encode to show';
+                document.getElementById('grid1').style.display = "none";
+                document.getElementById('gridLabel').style.display = "block";
+                var encrypt = document.getElementById('buttonEncrypt');
+                var decrypt = document.getElementById('buttonDecrypt');
+                encrypt.style.backgroundColor = 'white';
+                encrypt.style.border= '1px solid black';
+                decrypt.style.backgroundColor = 'white';
+                decrypt.style.border= '1px solid black';
+                return false;
+            }
+            else if (document.getElementById('srcText').value.length === 0 && document.getElementById('key1').value.length !== 0  ) {
+                document.getElementById('srcText').classList.add('is-invalid');
+                document.getElementById('gridHeader').innerText = 'Grid View Guidance';
+                document.getElementById('gridLabel').innerText = '- Please enter a plaintext';
+                document.getElementById('grid1').style.display = "none";
+                document.getElementById('gridLabel').style.display = "block";
+                var encrypt = document.getElementById('buttonEncrypt');
+                var decrypt = document.getElementById('buttonDecrypt');
+                encrypt.style.backgroundColor = 'white';
+                encrypt.style.border= '1px solid black';
+                decrypt.style.backgroundColor = 'white';
+                decrypt.style.border= '1px solid black';
+                return false;
+            }
+            else if (document.getElementById('srcText').value.length !== 0 && document.getElementById('key1').value.length === 0  ) {
+                document.getElementById('srcText').classList.add('is-invalid');
+                document.getElementById('gridHeader').innerText = 'Grid View Guidance';
+                document.getElementById('gridLabel').innerText = '- Please enter a keyword';
+                document.getElementById('grid1').style.display = "none";
+                document.getElementById('gridLabel').style.display = "block";
+                var encrypt = document.getElementById('buttonEncrypt');
+                var decrypt = document.getElementById('buttonDecrypt');
+                encrypt.style.backgroundColor = 'white';
+                encrypt.style.border= '1px solid black';
+                decrypt.style.backgroundColor = 'white';
+                decrypt.style.border= '1px solid black';
+                return false;
+            }
+            else {
+                document.getElementById('srcText').classList.remove('is-invalid');
+                return true;
+            }
+        }
+
+        function checkKey() {
+            if (document.getElementById('key1').value.length === 0) {
+                document.getElementById('key1').classList.add('is-invalid');
+                document.getElementById('gridLabel').style.display = "block";
+                document.getElementById('grid1').style.display = "none";
+                document.getElementById("resultText1").value = '';
+                document.getElementById("resultText1").style.display = 'none';
+                document.getElementById("resultLabel1").style.display = 'none';
+                var encrypt = document.getElementById("buttonEncrypt");
+                var decrypt = document.getElementById("buttonDecrypt");
+                encrypt.style.backgroundColor = 'white';
+                encrypt.style.border= '1px solid black';
+                decrypt.style.backgroundColor = 'white';
+                decrypt.style.border= '1px solid black';
+                return true;
+            }
+            else {
+                document.getElementById('key1').classList.remove('is-invalid');
+                document.getElementById('gridLabel').style.display = "none";
+                document.getElementById('grid1').style.display = "block";
+                return true;
+            }
+            }
+
+
+            function getAlphabet() {
+                    var alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+                    if (alphabet.length === 0)
+                        alphabet = new Array(95).fill(0).map(function (_, i) { return String.fromCharCode(i+32) }).join('');
+                    return alphabet;
+                }
+
+
+            function getSrcText() {
+                var text = document.getElementById('srcText').value;
+                document.getElementById('gridLabel').style.display = "block";
+                return text.replace(/ /g, '-');
+            }
+
+
+            function getKey() {
+                var key = document.getElementById("key1").value;
+                var keyword = key.length;
+                if(keyword > 0){
+                key = key.trim().toUpperCase();
+                document.getElementById('grid1').style.display = "block";
+                return key.replace(/ /g, '-');
+                }
+                else {
+                document.getElementById('grid1').style.display = "none";
+                return key;
+                }
+            }
+
+            function getKeyShifts(key, keyAlphabet) {
+                var arr = new Array(key.length);
+                for (var i = 0; i < key.length; i++) {
+                    var p = keyAlphabet.indexOf(key[i]);
+                    arr[i] = p;
+                }
+
+                return arr;
+            }
+            function updateTexts() {
+                var originalText = getSrcText();
+                var alphabet = getAlphabet();
+                var key = getKey();
+                var keyLength = key.length;
+                var keyAlphabet = alphabet.length != 95 ? alphabet : 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+                var resultText1 = '';
+                var resultText2 = '';
+                var resultText3 = '';
+
+                if (!KeepAllCharacters) {
+                    var textMask = getTextMask(originalText, options, alphabet);
+                    var normalizedText = getNormalizedText(originalText, textMask);
+
+                    if (normalizedText.length > 0 && keyLength > 0) {
+                        var transformedText = DecryptMode ? decrypt(normalizedText, alphabet, key, keyAlphabet) : encrypt(normalizedText, alphabet, key, keyAlphabet);
+                        resultText1 = restoreText(originalText, transformedText, textMask);
+                    }
+
+                } else {
+                    if (keyLength > 0) {
+                        resultText1 = DecryptMode ? decrypt1(originalText, alphabet, key, keyAlphabet) : encrypt1(originalText, alphabet, key, keyAlphabet);
+                        resultText2 = DecryptMode ? decrypt2(resultText1, alphabet, key, keyAlphabet) : encrypt2(resultText1, alphabet, key, keyAlphabet);
+                        resultText3 = DecryptMode ? decrypt3(resultText2, alphabet, key, keyAlphabet) : encrypt3(resultText2, alphabet, key, keyAlphabet);
+                        document.getElementById('gridLabel').style.display = "none";
+                    }
+                }
+
+                document.getElementById("resultText1").value = resultText1;
+                document.getElementById("resultText2").value = resultText2;
+                document.getElementById("resultText3").value = resultText3;
+            }
+
+            function clearText() {
+                document.getElementById("srcText").value = '';
+                document.getElementById("key1").value = '';
+                document.getElementById('gridHeader').innerText = 'Grid View Guidance';
+                var encrypt = document.getElementById("buttonEncrypt");
+                var decrypt = document.getElementById("buttonDecrypt");
+                encrypt.style.backgroundColor = 'white';
+                encrypt.style.border= '1px solid black';
+                decrypt.style.backgroundColor = 'white';
+                decrypt.style.border= '1px solid black';
+                document.getElementById('grid1').style.display = "none";
+                document.getElementById('grid2').style.display = "none";
+                document.getElementById('grid3').style.display = "none";
+                document.getElementById('gridLabel').style.display = "block";
+                document.getElementById('buttonCancel').style.backgroundColor = 'white';
+                document.getElementById('resultLabel1').style.display = 'none';
+                document.getElementById('resultLabel2').style.display = 'none';
+                document.getElementById('resultLabel3').style.display = 'none';
+                document.getElementById("resultText1").style.display = 'none';
+                document.getElementById("resultText2").style.display = 'none';
+                document.getElementById("resultText3").style.display = 'none';
+                document.getElementById('instruction').style.display = 'none';
+                document.getElementById('bylevel').style.display = 'none';
+                var clickOne = document.getElementById("button1");
+                var clickTwo = document.getElementById("button2");
+                var clickThree = document.getElementById("button3");
+                clickOne.disabled = true;
+                clickTwo.disabled = true;
+                clickThree.disabled = true;
+                clickOne.style.backgroundColor = 'lightgray';
+                clickTwo.style.backgroundColor = 'lightgray';
+                clickThree.style.backgroundColor = 'lightgray';
+                clickOne.style.border = 'transparent';
+                clickTwo.style.border = 'transparent';
+                clickThree.style.border = 'transparent';
+                document.getElementById('gridLabel').innerText = '- Enter keyword, and click decode or encode to show.';
+            }
+
+
+            function encrypt1(originalText, alphabet, key, keyAlphabet) {
+                var columnorder = getColumnOrder(key);
+                var columns1 = Array(key.length).fill('');
+                for (var i = 0; i < originalText.length; i++) {
+                    columns1[i % key.length] += originalText[i];
+                }
+                var dst = '';
+                for (var i = 0; i < key.length; i++) {
+                    dst += columns1[columnorder[i]];
+                }
+                var grid1 = generateLevel1Grid(key, columns1, columnorder);
+                document.getElementById("grid1").innerHTML = grid1;
+                return dst;
+            }
+
+            function decrypt1(originalText, alphabet, key, keyAlphabet) {
+                var columnorder = getColumnOrder(key);
+                var p = 0;
+                var columns1 = Array(key.length).fill('');
+                for (var i = 0; i < key.length; i++) {
+                    var k = columnorder[i];
+                    var l = Math.floor(originalText.length / key.length);
+                    if (k < originalText.length % key.length)
+                        l++;
+                    columns1[k] = originalText.slice(p, p + l);
+                    p += l;
+                }
+                var dst = '';
+                for (var i = 0; i < originalText.length; i++) {
+                    var k = i % key.length;
+                    dst += columns1[k][Math.floor(i / key.length)];
+                }
+                var grid1 = generateLevel1Grid(key, columns1, columnorder);
+                document.getElementById("grid1").innerHTML = grid1;
+                return dst;
+            }
+
+            function encrypt2(resultText1, alphabet, key, keyAlphabet) {
+                var columnorder = getColumnOrder(key);
+                var columns2 = Array(key.length).fill('');
+                for (var i = 0; i < resultText1.length; i++) {
+                    columns2[i % key.length] += resultText1[i];
+                }
+                var dst = '';
+                for (var i = 0; i < key.length; i++) {
+                    dst += columns2[columnorder[i]];
+                }
+                var grid2 = generateLevel2Grid(key, columns2, columnorder);
+                document.getElementById("grid2").innerHTML = grid2;
+                return dst;
+            }
+
+            function decrypt2(resultText1, alphabet, key, keyAlphabet) {
+                var columnorder = getColumnOrder(key);
+                var p = 0;
+                var columns2 = Array(resultText1.length).fill('');
+                for (var i = 0; i < key.length; i++) {
+                    var k = columnorder[i];
+                    var l = Math.floor(resultText1.length / key.length);
+                    if (k < resultText1.length % key.length)
+                        l++;
+                    columns2[k] = resultText1.slice(p, p + l);
+                    p += l;
+                }
+                var dst = '';
+                for (var i = 0; i < resultText1.length; i++) {
+                    var k = i % key.length;
+                    dst += columns2[k][Math.floor(i / key.length)];
+                }
+                var grid2 = generateLevel2Grid(key, columns2, columnorder);
+                document.getElementById("grid2").innerHTML = grid2;
+                return dst;
+            }
+
+            function encrypt3(resultText2, alphabet, key, keyAlphabet) {
+                var columnorder = getColumnOrder(key);
+                var columns3 = Array(key.length).fill('');
+                for (var i = 0; i < resultText2.length; i++) {
+                    columns3[i % key.length] += resultText2[i];
+                }
+                var dst = '';
+                for (var i = 0; i < key.length; i++) {
+                    dst += columns3[columnorder[i]];
+                }
+                var grid3 = generateLevel3Grid(key, columns3, columnorder);
+                document.getElementById("grid3").innerHTML = grid3;
+                return dst;
+            }
+
+            function decrypt3(resultText2, alphabet, key, keyAlphabet) {
+                var columnorder = getColumnOrder(key);
+                var p = 0;
+                var columns3 = Array(key.length).fill('');
+                for (var i = 0; i < key.length; i++) {
+                    var k = columnorder[i];
+                    var l = Math.floor(resultText2.length / key.length);
+                    if (k < resultText2.length % key.length)
+                        l++;
+                    columns3[k] = resultText2.slice(p, p + l);
+                    p += l;
+                }
+                var dst = '';
+                for (var i = 0; i < resultText2.length; i++) {
+                    var k = i % key.length;
+                    dst += columns3[k][Math.floor(i / key.length)];
+                }
+                var grid3 = generateLevel3Grid(key, columns3, columnorder);
+                document.getElementById("grid3").innerHTML = grid3;
+                return dst;
+            }
+
+            function getColumnOrder(key) {
+                var sortedkey = key.split('').sort().join('');
+                var columnorder = Array(key.length);
+                var columnorder2 = Array(key.length);
+                var p = 0;
+                var pch = '';
+                for (var i = 0; i < sortedkey.length; i++) {
+                    if (pch != sortedkey[i])
+                        p = 0;
+                    pch = sortedkey[i];
+                    p = key.indexOf(pch, p);
+                    columnorder[i] = p;
+                    columnorder2[p] = i;
+                    p++;
+                }
+
+                return columnorder;
+            }
+
+            function getInverseColumnOrder(columnorder) {
+                var columnorder2 = Array(columnorder.length);
+                for (var i = 0; i < columnorder.length; i++) {
+                    columnorder2[columnorder[i]] = i;
+                }
+
+                return columnorder2;
+            }
+
+            function generateLevel1Grid(key, columns1, columnorder) {
+                var grid1 = '';
+                var columnorder2 = getInverseColumnOrder(columnorder);
+                var textColor = 'white';
+                for (var i = 0; i < key.length; i++) {
+                    grid1 += '\t' + '<span style="color:' + textColor + ';">' + (columnorder2[i] + 1).toString() + '</span>\t';
+                    textColor = (textColor === 'white') ? '#0fa' : 'white';
+                }
+                grid1 += '\t\t'+'<span style="color: orange">=>\tBY ORDER</span>'+'\r\n';
+
+                textColor = 'white';
+
+                for (var i = 0; i < key.length; i++) {
+                    grid1 += '\t' + '<span style="color:' + textColor + ';">' + key[i] + '</span>\t';
+                    textColor = (textColor === 'white') ? '#0fa' : 'white';
+                }
+                grid1 += '\t\t'+'<span style="color: orange">=>\tKEYWORD</span>'+'\r\n\n';
+
+                for (var i = 0; i < (columns1[0]).length; i++) {
+                    textColor = 'white';
+                    for (var j = 0; j < key.length; j++) {
+                        grid1 += '\t-\t';
+                        if (i < columns1[j].length) {
+                            var replacementValue = '' + '<span style="color:' + textColor + '; text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px orange, 0 0 40px orange, 0 0 50px orange, 0 0 60px orange, 0 0 70px orange">' + columns1[j][i] + '</span>\t';
+                            grid1 = grid1.replace(/-\t/g, replacementValue);
+                            textColor = (textColor === 'white') ? '#0fa' : 'white';
+                        }
+                    }
+                    grid1 += '\r\n';
+                }
+
+                return '<span style="color: orange">Level 1:</span>\n'+ grid1;
+            }
+
+            function generateLevel2Grid(key, columns2, columnorder) {
+                var grid2 = '';
+                var columnorder2 = getInverseColumnOrder(columnorder);
+                var textColor = 'white';
+                for (var i = 0; i < key.length; i++) {
+                    grid2 += '\t' + '<span style="color:' + textColor + ';">' + (columnorder2[i] + 1).toString() + '</span>\t';
+                    textColor = (textColor === 'white') ? '#0fa' : 'white';
+                }
+                grid2 += '\t\t'+'<span style="color: orange">=>\tBY ORDER</span>'+'\r\n';
+
+                textColor = 'white';
+
+                for (var i = 0; i < key.length; i++) {
+                    grid2 += '\t' + '<span style="color:' + textColor + ';">' + key[i] + '</span>\t';
+                    textColor = (textColor === 'white') ? '#0fa' : 'white';
+                }
+                grid2 += '\t\t'+'<span style="color: orange">=>\tKEYWORD</span>'+'\r\n\n';
+
+                for (var i = 0; i < (columns2[0]).length; i++) {
+                    textColor = 'white';
+                    for (var j = 0; j < key.length; j++) {
+                        grid2 += '\t-\t';
+                        if (i < columns2[j].length) {
+                            var replacementValue = '' + '<span style="color:' + textColor + '; text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px orange, 0 0 40px orange, 0 0 50px orange, 0 0 60px orange, 0 0 70px orange">' + columns2[j][i] + '</span>\t';
+                            grid2 = grid2.replace(/-\t/g, replacementValue);
+                            textColor = (textColor === 'white') ? '#0fa' : 'white';
+                        }
+                    }
+                    grid2 += '\r\n';
+                }
+
+                return '\n====================================================================================================\n\n<span style="color: orange">Level 2:</span>\n'+ grid2;
+            }
+
+            function generateLevel3Grid(key, columns3, columnorder) {
+                var grid3 = '';
+                var columnorder2 = getInverseColumnOrder(columnorder);
+                var textColor = 'white';
+                for (var i = 0; i < key.length; i++) {
+                    grid3 += '\t' + '<span style="color:' + textColor + ';">' + (columnorder2[i] + 1).toString() + '</span>\t';
+                    textColor = (textColor === 'white') ? '#0fa' : 'white';
+                }
+                grid3 += '\t\t'+'<span style="color: orange">=>\tBY ORDER</span>'+'\r\n';
+
+                textColor = 'white';
+
+                for (var i = 0; i < key.length; i++) {
+                    grid3 += '\t' + '<span style="color:' + textColor + ';">' + key[i] + '</span>\t';
+                    textColor = (textColor === 'white') ? '#0fa' : 'white';
+                }
+                grid3 += '\t\t'+'<span style="color: orange">=>\tKEYWORD</span>'+'\r\n\n';
+
+                for (var i = 0; i < (columns3[0]).length; i++) {
+                    textColor = 'white';
+                    for (var j = 0; j < key.length; j++) {
+                        grid3 += '\t-\t';
+                        if (i < columns3[j].length) {
+                            var replacementValue = '' + '<span style="color:' + textColor + '; text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px orange, 0 0 40px orange, 0 0 50px orange, 0 0 60px orange, 0 0 70px orange">' + columns3[j][i] + '</span>\t';
+                            grid3 = grid3.replace(/-\t/g, replacementValue);
+                            textColor = (textColor === 'white') ? '#0fa' : 'white';
+                        }
+                    }
+                    grid3 += '\r\n';
+                }
+
+                return '\n====================================================================================================\n\n<span style="color: orange">Level 3:</span>\n'+ grid3;
+            }
+
+
+            KeepAllCharacters = true;
+
+            const content = document.getElementById('changeContent');
+            let isEncryptClicked = false;
+
+            function changeContentOne() {
+                isEncryptClicked = document.getElementById('buttonEncrypt').classList.contains('clicked');
+                if(isEncryptClicked) {
+                clickOne.style.backgroundColor = 'lightgray';
+                clickOne.style.border= '2px solid #0fa';
+                clickTwo.style.backgroundColor = 'white';
+                clickTwo.style.border= '1px solid black';
+                clickThree.style.backgroundColor = 'white';
+                clickThree.style.border= '1px solid black';
+                document.getElementById('gridHeader').innerText = 'Grid: Encryption\n: One Level';
+                document.getElementById('grid1').style.display = 'block';
+                document.getElementById('resultText1').style.display = 'block';
+                document.getElementById('grid2').style.display = 'none';
+                document.getElementById('grid3').style.display = 'none';
+                document.getElementById('resultText2').style.display = 'none';
+                document.getElementById('resultText3').style.display = 'none';
+                document.getElementById('resultLabel1').innerHTML = 'Encrypted Ciphertext (<span style="color: orange;">1st Level</span>):';
+                document.getElementById('resultLabel1').style.display = 'block';
+                document.getElementById('resultLabel2').style.display = 'none';
+                document.getElementById('resultLabel3').style.display = 'none';
+                scrollTo('result');
+                }
+                else {
+                clickOne.style.backgroundColor = 'lightgray';
+                clickOne.style.border= '2px solid #0fa';
+                clickTwo.style.backgroundColor = 'white';
+                clickTwo.style.border= '1px solid black';
+                clickThree.style.backgroundColor = 'white';
+                clickThree.style.border= '1px solid black';
+                document.getElementById('gridHeader').innerText = 'Grid: Decryption\n: One Level';
+                document.getElementById('grid1').style.display = 'block';
+                document.getElementById('resultText1').style.display = 'block';
+                document.getElementById('grid2').style.display = 'none';
+                document.getElementById('grid3').style.display = 'none';
+                document.getElementById('resultText2').style.display = 'none';
+                document.getElementById('resultText3').style.display = 'none';
+                document.getElementById('resultLabel1').innerHTML = 'Decrypted Ciphertext (<span style="color: orange;">1st Level</span>):';
+                document.getElementById('resultLabel1').style.display = 'block';
+                document.getElementById('resultLabel2').style.display = 'none';
+                document.getElementById('resultLabel3').style.display = 'none';
+                scrollTo('result');
+                }
+            }
+
+            function changeContentTwo() {
+                    isEncryptClicked = document.getElementById('buttonEncrypt').classList.contains('clicked');
+                    if(isEncryptClicked) {
+                    clickTwo.style.backgroundColor = 'lightgray';
+                    clickTwo.style.border= '2px solid #0fa';
+                    clickOne.style.backgroundColor = 'white';
+                    clickOne.style.border= '1px solid black';
+                    clickThree.style.backgroundColor = 'white';
+                    clickThree.style.border= '1px solid black';
+                    document.getElementById('gridHeader').innerText = 'Grid: Encryption\n: Two Levels';
+                    document.getElementById('grid1').style.display = 'block';
+                    document.getElementById('resultText1').style.display = 'block';
+                    document.getElementById('grid2').style.display = 'block';
+                    document.getElementById('resultText2').style.display = 'block';
+                    document.getElementById('grid3').style.display = 'none';
+                    document.getElementById('resultText3').style.display = 'none';
+                    document.getElementById('resultLabel1').innerHTML = 'Encrypted Ciphertext (<span style="color: orange;">1st Level</span>):';
+                    document.getElementById('resultLabel1').style.display = 'block';
+                    document.getElementById('resultLabel2').innerHTML = 'Encrypted Ciphertext (<span style="color: orange;">2nd Level</span>):';
+                    document.getElementById('resultLabel2').style.display = 'block';
+                    document.getElementById('resultLabel3').style.display = 'none';
+                    scrollTo('result');
+                    }
+                    else {
+                    clickTwo.style.backgroundColor = 'lightgray';
+                    clickTwo.style.border= '2px solid #0fa';
+                    clickOne.style.backgroundColor = 'white';
+                    clickOne.style.border= '1px solid black';
+                    clickThree.style.backgroundColor = 'white';
+                    clickThree.style.border= '1px solid black';
+                    document.getElementById('gridHeader').innerText = 'Grid: Decryption\n: Two Levels';
+                    document.getElementById('grid1').style.display = 'block';
+                    document.getElementById('resultText1').style.display = 'block';
+                    document.getElementById('grid2').style.display = 'block';
+                    document.getElementById('resultText2').style.display = 'block';
+                    document.getElementById('grid3').style.display = 'none';
+                    document.getElementById('resultText3').style.display = 'none';
+                    document.getElementById('resultLabel1').innerHTML = 'Decrypted Ciphertext (<span style="color: orange;">1st Level</span>):';
+                    document.getElementById('resultLabel1').style.display = 'block';
+                    document.getElementById('resultLabel2').innerHTML = 'Decrypted Ciphertext (<span style="color: orange;">2nd Level</span>):';
+                    document.getElementById('resultLabel2').style.display = 'block';
+                    document.getElementById('resultLabel3').style.display = 'none';
+                    scrollTo('result');
+                    }
+                }
+
+                function changeContentThree() {
+                        isEncryptClicked = document.getElementById('buttonEncrypt').classList.contains('clicked');
+                        if(isEncryptClicked) {
+                        clickThree.style.backgroundColor = 'lightgray';
+                        clickThree.style.border= '2px solid #0fa';
+                        clickOne.style.backgroundColor = 'white';
+                        clickOne.style.border= '1px solid black';
+                        clickTwo.style.backgroundColor = 'white';
+                        clickTwo.style.border= '1px solid black';
+                        document.getElementById('gridHeader').innerText = 'Grid: Encryption\n: Three Levels';
+                        document.getElementById('grid1').style.display = 'block';
+                        document.getElementById('resultText1').style.display = 'block';
+                        document.getElementById('grid2').style.display = 'block';
+                        document.getElementById('resultText2').style.display = 'block';
+                        document.getElementById('grid3').style.display = 'block';
+                        document.getElementById('resultText3').style.display = 'block';
+                        document.getElementById('resultLabel1').innerHTML = 'Encrypted Ciphertext (<span style="color: orange;">1st Level</span>):';
+                        document.getElementById('resultLabel1').style.display = 'block';
+                        document.getElementById('resultLabel2').innerHTML = 'Encrypted Ciphertext (<span style="color: orange;">2nd Level</span>):';
+                        document.getElementById('resultLabel2').style.display = 'block';
+                        document.getElementById('resultLabel3').innerHTML = 'Encrypted Ciphertext (<span style="color: orange;">3rd Level</span>):';
+                        document.getElementById('resultLabel3').style.display = 'block';
+                        scrollTo('result');
+                        }
+                        else {
+                        clickThree.style.backgroundColor = 'lightgray';
+                        clickThree.style.border= '2px solid #0fa';
+                        clickOne.style.backgroundColor = 'white';
+                        clickOne.style.border= '1px solid black';
+                        clickTwo.style.backgroundColor = 'white';
+                        clickTwo.style.border= '1px solid black';
+                        document.getElementById('gridHeader').innerText = 'Grid: Decryption\n: Three Levels';
+                        document.getElementById('grid1').style.display = 'block';
+                        document.getElementById('resultText1').style.display = 'block';
+                        document.getElementById('grid2').style.display = 'block';
+                        document.getElementById('resultText2').style.display = 'block';
+                        document.getElementById('grid3').style.display = 'block';
+                        document.getElementById('resultText3').style.display = 'block';
+                        document.getElementById('resultLabel1').innerHTML = 'Decrypted Ciphertext (<span style="color: orange;">1st Level</span>):';
+                        document.getElementById('resultLabel1').style.display = 'block';
+                        document.getElementById('resultLabel2').innerHTML = 'Decrypted Ciphertext (<span style="color: orange;">2nd Level</span>):';
+                        document.getElementById('resultLabel2').style.display = 'block';
+                        document.getElementById('resultLabel3').innerHTML = 'Decrypted Ciphertext (<span style="color: orange;">3rd Level</span>):';
+                        document.getElementById('resultLabel3').style.display = 'block';
+                        scrollTo('result');
+                        }
+                    }
+
+                    clickOne.addEventListener('click', changeContentOne);
+                    clickTwo.addEventListener('click', changeContentTwo);
+                    clickThree.addEventListener('click', changeContentThree);
+
+                    document.getElementById('buttonEncrypt').addEventListener('click', function () {
+                        this.classList.add('clicked');
+                        document.getElementById('buttonDecrypt').classList.remove('clicked');
+                    });
+
+                    document.getElementById('buttonDecrypt').addEventListener('click', function () {
+                        this.classList.add('clicked');
+                        document.getElementById('buttonEncrypt').classList.remove('clicked');
+                    });
+    </script>
+
+</body>
+</html>

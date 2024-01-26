@@ -1,0 +1,226 @@
+* {
+    margin: 0%;
+    padding: 0%;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: whitesmoke;
+    margin: 0%;
+    padding: 0%;
+    display: flex;
+    flex-direction: column;
+}
+
+.header-img {
+    background-color: aqua;
+    margin-bottom: 0%;
+}
+
+.header-img, img {
+    width: 100%;
+    height: 200px;
+
+}
+
+.header-nav{
+    /* background-color: aqua; */
+    height: 70px;
+    background-image: url(../images/header7.jpeg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    color: #fff;
+    margin-top: 0%;
+    padding-top: 5px;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0px 0px 7px 0px rgba(0, 0, 0, 0.3);
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    display: flex;
+}
+
+.navigation ul {
+    display: flex;
+    gap: 50px;
+    list-style-type: none;
+    justify-content: flex-start;
+    font-size: 30px;
+    height: auto;
+    padding: 0%;
+
+}
+a {
+    text-decoration: none;
+    color: black;
+}
+
+.navigation ul li {
+    padding: 0%;
+    margin: 0%;
+
+}
+
+.navigation ul li a {
+    padding: 10px;
+    color: white;
+    font-size: 30px;
+}
+
+.navigation ul li a:hover {
+    /* background-color: dodgerblue; */
+    border-bottom: 5px;
+    border-bottom-style: solid;
+    border-color: white;
+}
+
+.main-content {
+    justify-content: center;
+    justify-items: center;
+    align-items: center;
+    padding-top: 0%;
+    background-color: lightblue;
+    height: auto;
+    margin-bottom: 60px;
+    width: 100%;
+
+}
+
+
+
+footer {
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    padding: 20px;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+footer p {
+    color: #fff;
+}
+
+/* MONO CSS */
+
+.typeofEncryption{
+    margin-top: 10px;
+    margin-left: 430px;
+}
+
+.typeofEncryption select {
+    border-radius: 10px;
+    height: 25px;
+    cursor: pointer;
+    border-color: green;
+    border-width: 2px;
+    text-align: center;
+}
+
+.cm{
+    background-color: transparent;
+    border: none;
+    border-bottom: 2px solid red;
+    text-align: center;
+    margin-top: 30px;
+    width: 80%;
+    margin-left: 10%;
+}
+
+h1{
+    margin-top: 50px;
+    font-family: 'Kdam Thmor Pro', sans-serif;
+    text-align: center;
+}
+
+.box{
+    border: 2px solid black;
+    width: 1200px;
+}
+
+.cbox{
+    margin-left: auto;
+    margin-right: auto;
+    padding-top: 10px;
+    text-align: left;
+    width: 500px;
+}
+
+.key {
+    border-radius: 8px;
+    border-color: green;
+    font-size: 20px;
+    width: 500px;
+    height: 40px;
+    text-align: center;
+}
+
+.forCT{
+    font-family: 'Courier New', Courier, monospace;
+    text-align: center;
+}
+
+.forT{
+    font-family: 'Courier New', Courier, monospace;
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: larger;
+}
+
+.PT{
+    word-break: break-all;
+    border-radius: 8px;
+    border-color: green;
+    font-size: 20px;
+    width: 100%;
+    height: 40px;
+    text-align: center;
+}
+
+.txtPT {
+    font-family: 'Courier New', Courier, monospace;
+}
+
+table {
+    width: 80%;
+    border-collapse: collapse;
+    margin: auto;
+    margin-top: 30px;
+    height: 70px;
+    border: 1;
+}
+
+td {
+    width: 20px;
+    height: 20px;
+    text-align: center;
+    border: 1px solid black;
+    font-weight: bold;
+}
+
+.btns{
+    margin-top: 10px;
+    text-align: center;
+}
+
+.btns .enter, .encrypt{
+    width: 200px;
+    height: 40px;
+    border-radius: 10px;
+    cursor: pointer;
+    background-color:azure;
+    font-size: 20px;
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: bolder;
+}
+
+.enter:hover, .encrypt:hover{
+    background-color: bisque;
+}

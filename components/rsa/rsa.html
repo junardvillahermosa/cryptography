@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="rsa.css">
+    <title>RSA Calculator</title>
+</head>
+
+<body>
+    <header class="header-img">
+        <img src="../images/header5.png" alt="">
+
+    </header>
+
+    <header class="header-nav">
+        <div class="navigation" style="background: none; margin-left: 0; padding-left: 0; margin-right: 400px;">
+            <ul>
+                <li><a href="../index.html">back</a></li>
+            </ul>
+        </div>
+		<h2 style="color: white;">Rivest-Shamir-Adleman Calculator</h2>
+        <div style="background: none;"></div>
+
+    </header>
+
+    <div style="background: none;" class="rsa-main">
+
+				<div class="first-generateKey" style="background-image: url(../images/header7.jpeg); padding: 1%; border-radius:40px; margin-bottom: 20px;	  box-shadow:
+				5px 5px 10px 0px rgba(225, 224, 224, 0.7), /* top-left */
+        -5px 5px 10px 0px rgba(225, 224, 224, 0.7), /* top-right */
+        5px -5px 10px 0px rgba(225, 224, 224, 0.7), /* bottom-left */
+        -5px -5px 10px 0px rgba(225, 224, 224, 0.7); /* bottom-right */
+		">
+					<div class="step1" style="margin-top: 20px; border-radius: 0%; background: none;">
+						<h1 style="color: white;">KEY GENERATION</h1>
+					</div>
+					<div class="pq-prime" style="border-radius: 0%; background: none;">
+						<div style="display: flex; flex-direction: column; width: 100%; gap: 1px; padding: 0%;">
+							<label for='prime1'>Enter a number (P)</label>
+							<input id='prime1' type='number' value='' oninput='' placeholder="P value must be a prime" required/>
+						</div>
+
+
+						<div id='prime1-error' class='error-message'></div>
+
+						<div style="display: flex; flex-direction: column; width: 100%; gap: 1px; padding: 0%;">
+							<label for='prime2'>Enter a number (Q)</label>
+							<input id='prime2' type='number' value='' oninput='' placeholder="Q value must be a prime" required/>
+						</div>
+
+						<div id='prime2-error' class='error-message'></div>
+						<input type="button" onclick='generateKey()' value="CALCULATE NOW"/>
+					</div>
+
+
+
+
+					<div class="generatedDiv" style="border-radius: 0%; background: none;">
+						<div class="firstCol" style="margin-bottom: 5px; background: none;">
+							<label for=''>P Value (prime)</label>
+							<input id='pVal' type='text' value='' oninput='' readonly/>
+							<label for=''>Q Value (prime)</label>
+							<input id='qVal' type='text' value='' oninput='' readonly/>
+							<label for=''>Product N</label>
+							<input id='nVal' type='text' value='' oninput='' readonly/>
+						</div>
+						<div class="secondCol" style="margin-bottom: 5px; background: none;">
+							<label for=''>Totient</label>
+							<input id='tVal' type='text' value='' oninput='' readonly/>
+							<label for=''>Public Key (e)</label>
+							<input id='publicVal' type='text' value='' oninput='' readonly/>
+							<label for=''>Private Key (d)</label>
+							<input id='privateVal' type='text' value='' oninput='' readonly/>
+						</div>
+					</div>
+
+					<div style="padding-top: 0%;">
+						<input style="width: 100%; background-color: maroon;" type="button" onclick='clearKeys()' value="CLEAR"/>
+					</div>
+
+
+						<div id='output'></div>
+
+
+				</div>
+
+
+
+					<div class="second-encryption" style="margin-bottom: 20px; padding: 0%; padding-top: 2%; box-shadow:
+					5px 5px 10px 0px rgba(225, 224, 224, 0.7), /* top-left */
+			-5px 5px 10px 0px rgba(225, 224, 224, 0.7), /* top-right */
+			5px -5px 10px 0px rgba(225, 224, 224, 0.7), /* bottom-left */
+			-5px -5px 10px 0px rgba(225, 224, 224, 0.7); /* bottom-right */" >
+						<div class="step2">
+							<h1 style="color: white;">ENCRYPTION</h1>
+						</div>
+
+						<br>
+							<div id="asciiTable" style="text-align: center;"></div>
+						<br>
+
+						<div class="pq-prime" style="background: transparent;" >
+							<div style="display: flex; flex-direction: column; width: 100%; gap: 1px; padding: 0%; background: none;">
+								<label for='prime1'>Enter a Plaintext</label>
+								<input id='plain-text' type='text' value='' oninput='' required/>
+							</div>
+							<div style="display: flex; flex-direction: column; width: 100%; gap: 1px; padding: 0%;">
+								<label for='prime2'>ASCII Code</label>
+								<input id='decimal-value' type='text' value='' oninput='' readonly/>
+
+							</div>
+
+							<input type="button" onclick='convertPlaintext()' value="CONVERT PLAINTEXT TO ASCII CODE"/>
+							<input type="button" onclick='encryptMessage()' value="ENCRYPT  NOW"/>
+						</div>
+						<div class="encryption-display">
+							<div style="display: flex; flex-direction: column; width: 100%; gap: 1px; padding: 0%;">
+								<label for='ciphertext'>CIPHERTEXT</label>
+								<input id='ciphertext-value' type='text' value='' oninput='' readonly/>
+							</div>
+						</div>
+						<div style="margin: 0%; padding-top: 0%;">
+							<input style="width: 100%; background-color: maroon;" type="button" onclick='clearEncryption()' value="CLEAR"/>
+						</div>
+
+						<br>
+						<div id='plaintext-decimal-output' style="border-radius: 0%;"></div>
+
+
+						<!-- <div class="step3">
+							<h2>Step 3: Encryption</h2>
+						</div> -->
+						<!-- <div class="description">
+							<p>In the third step, we <b>encrypt</b> plaintext/message (each ascii code) to get the <b>ciphertext</b>. A formula is used to encrypt each ASCII code: <b>C = m^e MOD N</b>, where <b>C represents Ciphertext</b>, <b>m represents plaintext/message in ASCII code</b>, <b>e as Public key</b>, <b>MOD as an operator (percentage %)</b>, and <b>N as modulo N</b>. </p>
+						</div> -->
+
+
+						<div id='encryption' style="border-radius: 0%;"></div>
+						<div id="explanationContainer"></div>
+
+					</div>
+
+
+					<div class="third-decryption" style=" box-shadow:
+				5px 5px 10px 0px rgba(225, 224, 224, 0.7), /* top-left */
+        -5px 5px 10px 0px rgba(225, 224, 224, 0.7), /* top-right */
+        5px -5px 10px 0px rgba(225, 224, 224, 0.7), /* bottom-left */
+        -5px -5px 10px 0px rgba(225, 224, 224, 0.7); /* bottom-right */">
+						<div class="step4">
+							<h1 style="color: white;">DECRYPTION</h1>
+						</div>
+						<div style="display: flex; flex-direction: column; width: 100%; gap: 1px; padding: 0%;">
+							<label for='ciphertext'>Enter a Ciphertext</label>
+							<input id='enter-ciphertext-value' type='text' value='' oninput=''/>
+						</div>
+						<div class="pq-prime" style="margin-top: 0%; padding: 0%;">
+							<input type="button" onclick='decryptMessage()' value="DECRYPT  NOW"/>
+						</div>
+
+						<div style="display: flex; flex-direction: column; width: 100%; gap: 1px; padding: 0%;">
+							<label for='ciphertext'>PLAINTEXT (ASCII CODE)</label>
+							<input id='deciphertext-value' type='text' value='' oninput='' readonly/>
+						</div>
+						<div style=" padding: 0%;">
+							<input style="width: 100%; background-color: maroon;" type="button" onclick='clearDecryption()' value="CLEAR"/>
+						</div>
+
+
+
+						<br>
+							<div id='decryption'></div>
+						<br>
+
+						<div id="decryptionContainer"></div>
+						<input id="clear"  type="button" onclick="clearAllFields()" value="CLEAR ALL" style="background-color: maroon; margin-top: 25px;
+						padding: 10px;
+
+						width: 100%;
+						cursor: pointer;
+						border-radius: 3px;
+						height: auto;
+						font-size: 20px;">
+					</div>
+
+	</div>
+
+
+
+
+
+    <script>
+        const explanationContainer = document.getElementById('explanationContainer');
+        const decryptionContainer = document.getElementById('decryptionContainer');
+
+        const initialEncryptionExplanation = '<p><b>Encryption Process:</b></p>';
+        const initialDecryptionExplanation = '<p><b>Decryption Process:</b></p>';
+
+        function isPrime(num) {
+            if (num < 2) {
+                return false;
+            }
+            for (let i = 2; i <= Math.sqrt(num); i++) {
+                if (num % i === 0) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+		function gcd(a, b){
+			while (b !== 0){
+				const temp = b;
+				b = a % b;
+				a = temp;
+			}
+			return a;
+		}
+
+		function extendedGCD(a, b) {
+			if (b === 0) {
+				return { gcd: a, x: 1, y: 0 };
+			} else {
+					const result = extendedGCD(b, a % b);
+					const tempX = result.x;
+					result.x = result.y;
+					result.y = tempX - ((a - (a % b)) / b) * result.y;
+					return result;
+			}
+    	}
+
+        const prime1Input = document.getElementById('prime1');
+			prime1Input.addEventListener('input', validatePrime);
+
+			// Add an event listener for input field prime2
+		const prime2Input = document.getElementById('prime2');
+			prime2Input.addEventListener('input', validatePrime);
+
+        function validatePrime(event) {
+			const inputField = event.target;
+			const inputValue = inputField.value.trim();
+			const errorContainerId = inputField.id + '-error';
+			const errorContainer = document.getElementById(errorContainerId);
+
+			if (inputValue === '') {
+				displayError(prime1Input, prime2Input, errorContainer, 'Field cannot be empty');
+			} else if (isNaN(inputValue) || !isPrime(parseInt(inputValue))) {
+				displayError(prime1Input, prime2Input, errorContainer, 'Not a prime number');
+			} else {
+				clearError(prime1Input, prime2Input, errorContainer);
+			}
+	}
+
+		function displayError(prime1Input, prime2Input, errorContainer, errorMessage) {
+			prime1Input.classList.add('error-input');
+			prime2Input.classList.add('error-input');
+			errorContainer.textContent = errorMessage;
+			errorContainer.style.display = 'block';
+
+		}
+
+		function clearError(prime1Input, prime2Input, errorContainer) {
+			prime1Input.classList.remove('error-input');
+			prime2Input.classList.remove('error-input');
+			errorContainer.textContent = '';
+			errorContainer.style.display = 'none';
+		}
+
+
+		function generateKey() {
+            let n = 0;
+            let totient = 0;
+            const p = document.getElementById('prime1').value;
+            const q = document.getElementById('prime2').value;
+
+            if (p.trim() === '' || q.trim() === '') {
+                alert('Please fill out all fields');
+                return false; // Prevent form submission
+            } else if (isNaN(p) || isNaN(q) || !isPrime(p) || !isPrime(q)) {
+                alert('Both P and Q must be prime numbers. Please try again.');
+                document.getElementById('prime1').value = '';
+                document.getElementById('prime2').value = '';
+                return false;
+            } else if (p < 7 || q < 17) {
+                alert('It must be large prime numbers. P value must be at least 7 or up, and Q value must be 17 or up. Please try again.');
+                document.getElementById('prime1').value = '';
+                document.getElementById('prime2').value = '';
+                return false;
+            } else {
+                n = p * q;
+                totient = (p - 1) * (q - 1);
+
+                let possiblePublicKeys = [];
+                for (let publicKeyCandidate = 2; publicKeyCandidate < totient; publicKeyCandidate++) {
+                    if (isPrime(publicKeyCandidate) && gcd(publicKeyCandidate, totient) === 1) {
+                        possiblePublicKeys.push(publicKeyCandidate);
+                    }
+                }
+
+                if (possiblePublicKeys.length === 0) {
+                    alert('No valid public keys available. Please choose different P and Q values.');
+                    return;
+                }
+
+                let userChoice;
+                do {
+                    userChoice = parseInt(prompt("Choose a public key from the list: " + possiblePublicKeys.join(', ')));
+                } while (!possiblePublicKeys.includes(userChoice));
+
+                console.log("User chose public key:", userChoice);
+
+                // Calculate private key using modular multiplicative inverse
+                // const privateKey = modInverse(userChoice, totient);
+
+                // Calculate private key using extended Euclidean algorithm
+                const { gcd: _, x: privateKey, y: _y } = extendedGCD(userChoice, totient);
+                const positivePrivateKey = (privateKey % totient + totient) % totient;
+
+                console.log("Generated private key:", positivePrivateKey);
+
+                // Display the generated keys in the input fields
+                const pValue = document.getElementById('pVal');
+                pValue.value = p;
+                const qValue = document.getElementById('qVal');
+                qValue.value = q;
+                const nValue = document.getElementById('nVal');
+                nValue.value = n;
+                const totientValue = document.getElementById('tVal');
+                totientValue.value = totient;
+                const publicKeyValue = document.getElementById('publicVal');
+                publicKeyValue.value = userChoice;
+                const privateKeyValue = document.getElementById('privateVal');
+                privateKeyValue.value = positivePrivateKey;
+
+
+
+                // Display possible public keys in the output container
+                const generateKeys = document.getElementById('output');
+                generateKeys.style.display = 'block';
+                generateKeys.innerHTML = "<h2>STEPS FOR GENERATING KEYS:</h2>" + "<br>" +
+                            "<h2>1. To get the Product n, we multiply the values for P and Q:</h2>" +
+                            "<p>N = P x Q</p>" +
+                            "<p>N = " + p + " x " + q + "</p>" +
+                            "<p>N = " + n + ". This is the Product (N) that we have computed." + "</p>" + "<br>" +
+                            "<h2>2. To get the Totient, we subtract the values for P and Q by 1, then multiply both:</h2>" +
+                            "<p>Totient = (P - 1) x (Q - 1)</p>" +
+                            "<p>Totient = " + "(" + p + " - 1)" + " x " + "(" + q + " - 1)" + "</p>" +
+                            "<p>TOTIENT = " + totient + ". This is the value for Totient." + "</p>" + "<br>" +
+                            "<h2>3. To get the Public Key e, we need to find a prime number (e), where 1 < e < Totient that is relatively coprime with Totient. </h2>" +
+                            "<p><b>Possible Public Keys:</b></p>" + "<p>" + possiblePublicKeys.join(', ') + "</p>" + "<br>" +
+                            "<p><b>The Chosen Public Key is, e = " + userChoice + "</b></p>" + "<br>" +
+                            "<p><b>To see if the GCD or Greatest Common Divisor of e = " + userChoice + " and totient = " + totient + " is indeed 1, indicating that " + userChoice + " is RELATIVELY PRIME to " + totient +  " , let's apply Euclidean Algorithm:</b></p>" + "<br>" +
+                            "<h2>Euclidean Algorithm:</h2>" +
+                            "<p>GCD(a, b) = GCD(b, a mod b)</p>" +
+                            "<h2>Computation:</h2>" ;
+
+                            // Perform Euclidean Algorithm computation
+                            let a = userChoice;
+                            let b = totient;
+                            while (b !== 0) {
+                                const remainder = a % b;
+                                generateKeys.innerHTML += "<p>GCD(" + a + ", " + b + ") = GCD(" + b + ", " + a + " mod " + b + ")</p>" +
+                                "<p>GCD(" + a + ", " + b + ") = GCD(" + b + ", " + remainder + ")</p>" + "<br>";
+                                a = b;
+                                b = remainder;
+                            }
+                            generateKeys.innerHTML += "<p><b>At this point, the remainder becomes 0, and the GCD is found to be " + a + ". Therefore:</b></p>" +
+                            "<p><b>GCD(" + userChoice + ", " + totient + ") = " + a + "</b></p>" + "<br>" +
+                            "<p>The formula for the Euclidean Algorithm is recursive, and you keep applying it until the remainder becomes 0. " +
+                            "The GCD is the last non-zero remainder in the process. In this case, the GCD is " + a + ", confirming that " +
+                            userChoice + " and " + totient + " are relatively prime.</p>" + "<br>" +
+
+
+
+                            "<h2>4. To get the Private key d, a product of d and e, divided by Totient T must result in a remainder of 1, where (d x e) MOD T = 1. </h2>" +
+
+							"<p>We will find the modular multiplicative inverse of " +
+							userChoice + " modulo " + totient + ".</p>" + "<br>" +
+							"<p><b>Formula:</b></p>" +
+							"<p>d = (Totient x 1 + 1) / e</p>" + "<br>" +
+							"<h2>Computation:</h2>" +
+							"<p>Take Note: If the private key is decimal, add the totient itself until the private key becomes the whole number</p>" ;
+
+
+							// Perform Extended Euclidean Algorithm computation
+
+							let publicKey = userChoice;
+							let totientKey = totient;
+
+							let pPrivateKey = (totient * 1 + 1) / publicKey;
+							let round = 1;
+
+							// ADD THIS PART
+							generateKeys.innerHTML += "<p><b> Round " + round + "</b></p>";
+							generateKeys.innerHTML += "<p> d = (" + totient + " * 1 + 1 ) / " + publicKey + "</p>";
+							generateKeys.innerHTML += "<p> d = " + pPrivateKey + "</p>" + "<br>";
+
+							//Check if the d or pPrivateKey is a decimal, add totient to itself until d is a whole number
+
+							while (pPrivateKey % 1 !== 0) {
+								totient += totientKey;
+								pPrivateKey = (totient * 1 + 1) / publicKey;
+								round++;
+
+								 generateKeys.innerHTML += "<p><b> Round " + round + "</b></p>";
+								 generateKeys.innerHTML += "<p> d = (" + totient + " * 1 + 1 ) / " + publicKey + "</p>";
+								 generateKeys.innerHTML += "<p> d = " + pPrivateKey + "</p>" + "<br>";
+							}
+
+							// Ensure that the positive private key is non-negative
+							// let privatePositiveKey = oldS;
+							// while (privatePositiveKey < 0) {
+							// 	privatePositiveKey += totient;
+							// }
+
+							generateKeys.innerHTML += "<p><b>The Private Key is, d = " + pPrivateKey + ".</b></p>" + "<br>";
+
+							// Check if (d x e) MOD T = 1
+							const productModT = (pPrivateKey * userChoice) % totient;
+							generateKeys.innerHTML += "<h2>Verification:</h2>" +
+								"<p>Check if (d x e) MOD T = 1:</p>" +
+								"<p>(" + pPrivateKey + " x " + userChoice + ") MOD " + totientKey + " = " + productModT + "</p>";
+
+							if (productModT === 1) {
+								generateKeys.innerHTML += "<p><b>The verification is true. (d x e) MOD T = 1.</b></p>";
+							} else {
+								generateKeys.innerHTML += "<p><b>The verification is false. (d x e) MOD T does not equal 1.</b></p>";
+							}
+
+						}
+			}
+
+
+        // Function to calculate the modular multiplicative inverse
+        function modInverse(a, m) {
+            for (let i = 1; i < m; i++) {
+                if ((a * i) % m === 1) {
+                    return i;
+                }
+            }
+            return 1;
+        }
+
+        function  displayASCIITable() {
+					// Display ASCII Table
+					const tableContainer = document.getElementById('asciiTable');
+					tableContainer.innerHTML = '<h2 style="color: white;">ASCII Table</h2>';
+					tableContainer.style.textAlign = 'center';
+					tableContainer.style.margin = 'auto';
+					tableContainer.style.display = 'flex';
+					tableContainer.style.flexDirection = 'column';
+					tableContainer.style.justifyContent = 'center';
+					tableContainer.style.backgroundColor = 'transparent';
+					// tableContainer.style.color = 'white';
+
+					const table = document.createElement('table');
+					table.style.borderCollapse = 'collapse';
+					table.style.width = '70%';
+					table.style.margin = 'auto';
+
+					// Create table header
+					const headerRow = document.createElement('tr');
+					const headerCols = ['Character', 'ASCII Code', 'Character', 'ASCII Code'];
+					for (const col of headerCols) {
+						const th = document.createElement('th');
+						th.textContent = col;
+						th.style.border = '1px solid black';
+						th.style.padding = '4px';
+						th.style.textAlign = 'center';
+						// th.style.color = 'red';
+						th.style.backgroundColor = '#f2f2f2';
+						headerRow.appendChild(th);
+					}
+					table.appendChild(headerRow);
+
+					// Create table content
+					for (let i = 32; i <= 126; i += 2) {
+						const row = document.createElement('tr');
+
+						for (let j = 0; j < 2; j++) {
+							const col1 = document.createElement('td');
+							const char1 = i + j <= 126 ? String.fromCharCode(i + j) : '';
+							col1.textContent = char1;
+							col1.style.border = '1px solid black';
+							col1.style.padding = '4px';
+							col1.style.textAlign = 'center';
+							col1.style.backgroundColor = 'lightblue';
+							row.appendChild(col1);
+
+							const col2 = document.createElement('td');
+							const code1 = i + j <= 126 ? i + j : '';
+							col2.textContent = code1;
+							col2.style.border = '1px solid black';
+							col2.style.padding = '4px';
+							col2.style.textAlign = 'center';
+							col2.style.backgroundColor = 'lightblue';
+							row.appendChild(col2);
+						}
+
+						table.appendChild(row);
+					}
+
+					tableContainer.appendChild(table);
+				}
+
+        function convertPlaintext(){
+
+            const plainText = document.getElementById('plain-text').value;
+
+            if (plainText === '') {
+                alert('Please enter the plaintext!');
+                return false;
+            } else {
+                const convertToDecimal = plainText.split('').map(char => {
+                    const asciiValue = char.charCodeAt(0);
+                    if ((char >= 'A' && char <= 'Z') && (char >= 'a' && char <= 'z')) {
+                        // Uppercase or lowercase letters
+                        return asciiValue;
+                    } else {
+                        // Other characters
+                        return asciiValue;
+                    }
+                });
+
+
+                const decimalVal = document.getElementById('decimal-value');
+                decimalVal.value = convertToDecimal.join(' ');
+
+                const resultElement = document.getElementById('plaintext-decimal-output');
+                const ul = document.createElement('ul');
+
+                convertToDecimal.forEach((value, index) => {
+                    const originalChar = plainText[index];
+                    const li = document.createElement('li');
+                    li.innerHTML = `${originalChar} = ${value}`;
+                    ul.appendChild(li);
+                });
+
+                // Display list items to the container "plaintext-decimal-output"
+                resultElement.innerHTML = 'PLAINTEXT TO DECIMAL VALUES';
+                resultElement.appendChild(ul);
+
+                resultElement.style.display = 'block';
+                ul.style.listStyleType = 'none';
+            }
+        }
+document.addEventListener('DOMContentLoaded',displayASCIITable);
+
+
+		//Formula for ecnrypting decimal values from a converted plaintext
+		//(m^exp) % mod
+
+		function modFunction(m, exponent, mod){
+			if(mod === 1) return 0;
+
+			let ciphertext = 1;
+			m = m % mod;
+
+			while (exponent > 0) {
+				if (exponent % 2 === 1){
+					ciphertext = (ciphertext * m) % mod;
+				}
+
+				exponent = Math.floor(exponent / 2);
+				m = (m * m) % mod;
+			}
+			return ciphertext;
+		}
+		function displayEncryptionExplanation(decimalArr, publicKey, n, encryptedResults) {
+            clearExplanationContainers();
+			// explanationContainer.style.color = 'white';
+            explanationContainer.innerHTML = '<p style="color: white;"><b>Encryption Process:</b></p>' +
+                '<ol>' +
+                `<li style="color: white;">Convert the plaintext message (M) into an integer (m).</li>` +
+                `<li style="color: white;">Compute the ciphertext (C) using the public key: \(C \equiv m^e \mod N\).</li>` +
+                `<li style="color: white;">Calculate \(C \mod N\) to get the final ciphertext value.</li>` +'<br>'+
+                '</ol>' + '<br'
+                '<p style="color: white;">The following shows the step-by-step encryption process:</p>'+'<br>';
+
+            const ul = document.createElement('ul');
+
+            decimalArr.forEach((value, index) => {
+                const originalChar = String.fromCharCode(value);
+                const li = document.createElement('li');
+                const explanation = getModularExponentiationExplanation(value, publicKey, n, encryptedResults[index]);
+                li.innerHTML = explanation;
+                ul.appendChild(li);
+            });
+
+            explanationContainer.appendChild(ul);
+            ul.style.listStyleType = "none";
+
+            explanationContainer.innerHTML += `<p style="font-size:20px; color: white;">SO, THE ENCRYPTED MESSAGE IS (C = ${encryptedResults.join(' ')}).</p>`+'<br>';
+        }
+
+        function getModularExponentiationExplanation(base, exponent, modulo, result) {
+            let explanation = `<p style="color: white;">Encrypting the message ${String.fromCharCode(base)} (ASCII ${base}):</p>`;
+            explanation += `<p style="color: white;">${String.fromCharCode(base)} = ${base}^${exponent} mod ${modulo} = ${result}</p>`;
+
+            explanation += '<p style="color: white;">Let\'s calculate this step by step using modular exponentiation:</p>'+'<br>';
+
+            let currentBase = base;
+            let currentResult = 1;
+
+            for (let i = 0; i < exponent; i++) {
+                const intermediateResult = (currentResult * currentBase) % modulo;
+                explanation += `<p style="color: white;">${currentBase} * ${currentResult}= ${currentBase * currentResult} mod ${modulo} = ${intermediateResult}</p>`;
+                currentResult = intermediateResult;
+            }
+
+            explanation += `<p style="font-size:15px;font-weight:bold; color: white;">Therefore, ${String.fromCharCode(base)} = ${result}</p>`+'<br>';
+
+            return explanation;
+        }
+
+
+
+		//Encrypt message using the formula from the modFunction()
+		function encryptMessage() {
+			const decimalValues = document.getElementById('decimal-value').value;
+			const publicKey = parseInt(document.getElementById('publicVal').value);
+			const n = parseInt(document.getElementById('nVal').value);
+
+
+			if (decimalValues === '' || isNaN(publicKey) || isNaN(n)) {
+				alert("Please GENERATE KEYS and CONVERT PLAINTEXT to DECIMAL first!!!");
+			} else {
+				const decimalArr = decimalValues.split(' ').map(Number);
+				const encryptedResults = [];
+
+				for (const decimal of decimalArr){
+					const encryptedVal = modFunction(decimal, publicKey, n);
+					encryptedResults.push(encryptedVal);
+
+					//Display ciphertext in the ciphertext input field
+					const ciphertextField = document.getElementById('ciphertext-value');
+					ciphertextField.value = encryptedResults.join(' ');
+				}
+				clearExplanationContainers();
+
+// Display explanation in the encryption container
+        displayEncryptionExplanation(decimalArr, publicKey, n, encryptedResults);
+                        const encryptionContainer = document.getElementById('encryption');
+                        encryptionContainer.innerHTML = 'ENCRYPTED VALUES FROM PLAINTEXT => Formula: C = (m^e) MOD n';
+
+                        const ul = document.createElement('ul');
+                        encryptedResults.forEach((value, index) => {
+                            const originalChar = String.fromCharCode(decimalArr[index]);
+                            const li = document.createElement('li');
+                            li.innerHTML = `${originalChar} ===> (${decimalArr[index]}^${publicKey}) MOD ${n} = ${value}`;
+
+                            ul.appendChild(li);
+                        });
+
+                        encryptionContainer.appendChild(ul);
+                        encryptionContainer.style.display = "block";
+                        ul.style.listStyleType = "none";
+                    }
+                }
+                function clearExplanationContainers() {
+
+            explanationContainer.innerHTML = initialEncryptionExplanation;
+            decryptionContainer.innerHTML = initialDecryptionExplanation;
+        }
+
+
+		//Formula for ecnrypting decimal values from a converted plaintext
+		//(m^exp) % mod
+
+		function modFunctionD(c, exp, modulo){
+			if(modulo === 1) return 0;
+
+			let deciphertext = 1;
+
+			c = c % modulo;
+
+			while( exp > 0){
+				if (exp % 2 === 1){
+					deciphertext = (deciphertext * c) % modulo;
+				}
+				exp = Math.floor(exp / 2);
+				c = (c * c) % modulo;
+			}
+			return deciphertext;
+		}
+
+		function displayDecryptionExplanation(ciphertextArr, privateKey, nvalue, decryptedResults) {
+
+
+            decryptionContainer.innerHTML += '<p style="color: white;"><b>Decryption Process:</b></p>' +
+                '<ol>' +
+                `<li style="color: white;">Compute the original message (m) using the private key: \(m \equiv C^d \mod N\).</li>` +
+                `<li style="color: white;">Calculate \(m \mod N\) to get the intermediate decrypted message value.</li>` +
+                `<li style="color: white;">Convert the integer \(m\) back to the original plaintext message.</li>` +
+                '</ol>' + "<br>" +
+                '<p style="color: white;">The following shows the step-by-step decryption process:</p>' + "<br>";
+
+            const ul = document.createElement('ul');
+            decryptedResults.forEach((value, index) => {
+                const originalChar = String.fromCharCode(value);
+                const li = document.createElement('li');
+                const decrypt = getDecryptionExplanation(ciphertextArr[index], privateKey, nvalue, decryptedResults[index]);
+                li.innerHTML = decrypt;
+                ul.appendChild(li);
+            });
+
+            decryptionContainer.appendChild(ul);
+            ul.style.listStyleType = "none";
+
+            decryptionContainer.innerHTML += `<p style="font-size:20px; color: white;">THE DECRYPTED MESSAGE IS "${String.fromCharCode(...decryptedResults)}"</p>`;
+        }
+
+        function getDecryptionExplanation(base, exponent, modulo, result) {
+            let explanation = `<p style="color: white;">Decrypting the encrypted message  (ASCII ${base}):</p>`;
+            explanation += `<p style="color: white;">${base}^${exponent} mod ${modulo} = ${result}</p>` + "<br>";
+
+            explanation += '<p style="color: white;">Let\'s calculate this step by step using modular exponentiation:</p>' + "<br>";
+
+            let currentBase = base;
+            let currentResult = 1;
+
+            // for (let i = 0; i < exponent; i++) {
+            //     const intermediateResult = (currentResult * currentBase) % modulo;
+            //     explanation += `<p>${currentBase}^${i + 1} \\= ${currentBase} \\mod ${modulo} \\= ${intermediateResult}</p>`;
+            //     currentResult = intermediateResult;
+            // }
+            for (let i = 0; i < exponent; i++) {
+                const intermediateResult = (currentResult * currentBase) % modulo;
+                explanation += `<p style="color: white;">${currentBase} * ${currentResult} = ${currentBase * currentResult} mod ${modulo} = ${intermediateResult}</p>`;
+                currentResult = intermediateResult;
+            }
+
+            explanation += `<p style="color: white;"><b>Therefore, the decrypted message of (ASCII ${base}) is plaintext (ASCII Code) ${result}</b></p>`+'<br>';
+            // explanation += `<p>Therefore, ${String.fromCharCode(base)} \\= ${result} \\mod ${modulo}</p>`;
+
+            return explanation;
+        }
+
+
+		//Decrypt message using the formula from the modFunctionD()
+		function decryptMessage(){
+			const ciphertextValues = document.getElementById('enter-ciphertext-value').value;
+			const privateKey = parseInt(document.getElementById('privateVal').value);
+			const nvalue = parseInt(document.getElementById('nVal').value);
+
+			if( ciphertextValues === '' ){
+				alert("Please enter the ciphertext first!");
+			} else if (isNaN(privateKey) || isNaN(nvalue)){
+				alert("Please generate keys first!");
+			}
+			// else if(typeof ciphertextValues === 'string'){
+			// 	alert("Invalid input. Please try again!");
+			// }
+			else {
+				const ciphertextArr = ciphertextValues.split(' ').map(Number);
+				const decryptedResults = [];
+
+				for (const decimalV of ciphertextArr){
+					const decryptedVal = modFunctionD(decimalV, privateKey, nvalue);
+					decryptedResults.push(decryptedVal);
+
+					//Display the plaintext decimal values in the PLAINTEXT (DECIMAL VALUES) FIELD
+					const deciphertextField = document.getElementById('deciphertext-value');
+					deciphertextField.value = decryptedResults.join(' ');
+				}
+				// Display explanation in the decryption container
+				displayDecryptionExplanation(ciphertextArr, privateKey, nvalue, decryptedResults);
+
+
+				const decryptionContainer = document.getElementById('decryption');
+				decryptionContainer.innerHTML = 'DECRYPTED VALUES FROM CIPHERTEXT => Formula: P = (c^d) MOD n';
+
+				const ul = document.createElement('ul');
+				decryptedResults.forEach((value, index) => {
+					const originalChar = String.fromCharCode(value);
+
+					const li = document.createElement('li');
+					li.innerHTML = `${originalChar} ===> (${ciphertextArr[index]}^${privateKey}) MOD ${nvalue} = ${value}`;
+					ul.appendChild(li);
+				});
+
+				decryptionContainer.appendChild(ul);
+				decryptionContainer.style.display = "block";
+				ul.style.listStyleType = "none";
+
+			}
+		}
+
+		function clearKeys(){
+			document.getElementById('prime1').value='';
+			document.getElementById('prime2').value='';
+			document.getElementById('pVal').value='';
+			document.getElementById('qVal').value='';
+			document.getElementById('nVal').value='';
+			document.getElementById('tVal').value='';
+			document.getElementById('publicVal').value='';
+			document.getElementById('privateVal').value='';
+			document.getElementById('output').style.display='none';
+		}
+
+		function clearEncryption(){
+			document.getElementById('plain-text').value='';
+			document.getElementById('decimal-value').value='';
+			document.getElementById('plaintext-decimal-output').innerHTML='';
+			document.getElementById('plaintext-decimal-output').style.display='none';
+			document.getElementById('ciphertext-value').value='';
+			document.getElementById('encryption').innerHTML='';
+			document.getElementById('explanationContainer').innerHTML='';
+			document.getElementById('encryption').style.display='none';
+
+		}
+
+		function clearDecryption(){
+			document.getElementById('enter-ciphertext-value').value='';
+			document.getElementById('decryption').innerHTML='';
+			document.getElementById('deciphertext-value').value='';
+			document.getElementById('decryptionContainer').innerHTML='';
+			document.getElementById('decryption').style.display='none';
+			clearExplanationContainers();
+		}
+
+
+		function clearAllFields(){
+			document.getElementById('prime1').value='';
+			document.getElementById('prime2').value='';
+			document.getElementById('pVal').value='';
+			document.getElementById('qVal').value='';
+			document.getElementById('nVal').value='';
+			document.getElementById('tVal').value='';
+			document.getElementById('publicVal').value='';
+			document.getElementById('privateVal').value='';
+			document.getElementById('output').style.display='none';
+			document.getElementById('plain-text').value='';
+			document.getElementById('decimal-value').value='';
+			document.getElementById('plaintext-decimal-output').innerHTML='';
+			document.getElementById('plaintext-decimal-output').style.display='none';
+			document.getElementById('ciphertext-value').value='';
+			document.getElementById('encryption').innerHTML='';
+			document.getElementById('explanationContainer').innerHTML='';
+			document.getElementById('encryption').style.display='none';
+			document.getElementById('enter-ciphertext-value').value='';
+			document.getElementById('decryption').innerHTML='';
+			document.getElementById('deciphertext-value').value='';
+			document.getElementById('decryptionContainer').innerHTML='';
+			document.getElementById('decryption').style.display='none';
+
+
+
+
+
+			// clearExplanationContainers();
+
+		}
+
+    </script>
+
+
+
+
+
+    <footer class="footer">
+        <p>&copy; 2024 Junard Villahermosa & Martin Beldeniza. All rights reserved.</p>
+    </footer>
+
+</body>
+</html>

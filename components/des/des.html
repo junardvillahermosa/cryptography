@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="des.css">
+    <title>DES Calculator</title>
+</head>
+
+<style>
+	*{
+		font-family: Arial, Helvetica, sans-serif;
+	}
+	/* DES Calculate Modal Css*/
+	.modal {
+	display: none; /* Hidden by default */
+	position: fixed; /* Stay in place */
+	z-index: 1; /* Sit on top */
+	padding-top: 300px; /* Location of the box */;
+	left: 0;
+	top: 0;
+	width: 100%; /* Full width */
+	height: 100%; /* Full height */
+	overflow: auto; /* Enable scroll if needed */
+	background-color: rgb(0,0,0); /* Fallback color */
+	background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+	}
+
+	/* Modal Content */
+	.modal-content {
+	background-color: #fefefe;
+	margin: auto;
+	padding: 40px 20px;
+	border-radius: 5px;
+	border: 1px solid #888;
+	width: 40%;
+	padding: 30px 40px;
+	}
+
+	/* The Close Button */
+	.close {
+	color: black;
+	float: right;
+	font-size: 28px;
+	margin-top: -35px;
+	font-weight: bold;
+	}
+
+	.close:hover,
+	.close:focus {
+	color: #DD1313;
+	text-decoration: none;
+	cursor: pointer;
+	}
+
+	.modal .modal-content .header{
+		color: black;
+		font-size: 16px;
+		font-weight: bold;
+	}
+	.modal .modal-content .name{
+		color: #ADADAD;
+		font-size: 12px;
+		margin-top: -10px;
+	}
+	.modal .modal-content form{
+		margin-top: 40px;
+
+	}
+	.modal .modal-content form.plaintext.key{
+		display: block;
+	}
+	.modal .modal-content form .key{
+		margin-top: 40px;
+	}
+	.modal .modal-content form .plaintext p{
+		font-size: 14px;
+		color: black;
+	}
+	.modal .modal-content form .key p{
+		font-size: 14px;
+		color: black;
+	}
+	.modal .modal-content form input{
+		margin-top: 5px;
+		height: 40px;
+		width: 100%;
+		border-radius: 5px;
+		border: 1px solid #84888b;
+		padding: 0px 10px;
+	}
+	.modal .modal-content form input[type]{
+		font-weight: bold;
+	}
+	.modal .modal-content form input:hover{
+		border: 1px solid #DD1313;
+		color: #DD1313;
+	}
+
+	.modal .modal-content .button{
+		float: right;
+
+
+	}
+	.modal .modal-content .button button{
+		width: 100px;
+		color: white;
+	}
+	.modal .modal-content .button .clear{
+		border: 1px solid #adadad;
+		background-color: transparent;
+		color: black;
+	}
+	.modal .modal-content .button .clear:hover{
+		box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+	}
+	/* Help modal css */
+
+	.modals {
+	display: none; /* Hidden by default */
+	position: fixed; /* Stay in place */
+	z-index: 1; /* Sit on top */
+	padding-top: 100px; /* Location of the box */
+	left: 0;
+	top: 0;
+	width: 90%; /* Full width */
+	height: 100%; /* Full height */
+	overflow: auto; /* Enable scroll if needed */
+	background-color: rgb(0,0,0); /* Fallback color */
+	background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+	}
+
+	/* Modal Content */
+	.modal-contents {
+	background-color: #fefefe;
+	margin: auto;
+	border-radius: 5px;
+	padding: 40px 20px;
+	border: 1px solid #888;
+	width: 40%;
+	}
+
+	/* The Close Button */
+	.closes {
+	color: black;
+	float: right;
+	font-size: 28px;
+	margin-top: -35px;
+	font-weight: bold;
+	}
+
+	.closes:hover,
+	.closes:focus {
+	color: #DD1313;
+	text-decoration: none;
+	cursor: pointer;
+	}
+	.modals .modal-contents{
+	width: 60%;
+	height: 500px;
+	}
+	.modals .modal-contents .header{
+		color: black;
+		font-size: 16px;
+		font-weight: bold;
+	}
+	.modals .modal-contents .name{
+		color: #ADADAD;
+		font-size: 12px;
+		margin-top: -10px;
+	}
+	.modals .modal-contents .text-content{
+		margin-top: 40px;
+
+	}
+	.modals .modal-contents .text-content p{
+		color: black;
+		font-size: 13px;
+	}
+	@media only screen and (max-width: 736px) {
+		.modal-content {
+			width: 80%;
+		}
+		.modal-contents {
+			width: 80%;
+		}
+	}
+</style>
+
+<body>
+    <header class="header-img">
+        <img src="../images/header5.png" alt="">
+
+    </header>
+
+    <header class="header-nav">
+        <div class="navigation">
+            <ul>
+                <li><a href="../index.html" style="font-size: 30px;">back</a></li>
+
+            </ul>
+        </div>
+        <h2>Data Encryption Standard Calculator</h2>
+        <div></div>
+
+    </header>
+
+    <!-- DES CODE -->
+	<div class="spinner-cont" id="spinner">
+        <div class="lds-spinner"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div><br />
+        <h3 id="text"></h3>
+    </div>
+    <br>
+    <div class="side-bar">
+        <div class="content">
+            <div id="myModal" class="modal" >
+                <!-- Modal content -->
+                 <div class="modal-content" style="background-image: url(../images/header7.jpeg); background-repeat: no-repeat; background-size: cover;">
+                    <h2 style="color: white;">Encryption</h2>
+                   <form action="">
+                    <div class="plaintext">
+                        <p style="color: white;">Plaintext</p>
+                        <input id='msg' type='text' value='' required oninput='stringToHexadecimal()'/>
+                    </div>
+                    <div class="key">
+                        <p style="color: white;">Key</p>
+                        <input id='key' type='text' value='' required oninput='stringToHexadecimal()'/>
+                    </div>
+                    <div style="display: flex; justify-content: space-around; margin-top: 3rem; ">
+                        <button type="button" class="close" style="font-size: 16px; font-weight: 500; margin-left: 1rem; background: transparent; color: white; border: 1px solid skyblue;">Close</button>
+                        <button type="button" class="enc" style="font-size: 14px; font-weight: 300; color: white; background-color: skyblue;" onclick="encryptDES()">Encrypt</button>
+                    </div>
+                   </form>
+                 </div>
+                </div>
+                <!----modal for decryption-->
+                <div id="myModalss" class="modal">
+                    <!-- Modal content -->
+                     <div class="modal-content" style="background-image: url(../images/header7.jpeg); background-repeat: no-repeat; background-size: cover;">
+                        <h2 style="color: white;">Decryption</h2>
+                       <form  name="stuff" action="">
+                        <div class="plaintext">
+                            <p style="color: white;">Ciphertext</p>
+                            <input id='msg1' type='text' name="indata" value='' oninput='stringToHexadecimal1()'/>
+                            <input type="radio"style="display: none" name="intype"></input>
+                            <input type="radio"style="display: none" name="intype" checked="checked"></input>
+                            <div style="padding-top: 1rem; display: flex; flex-direction: row; gap: 4rem;">
+                                <div style="display: flex; flex-direction: row; align-items: center; position: relative;">
+                                    <label for="pText" style="color: white;">Plaintext  </label>
+                                    <input type="radio" id="pText" name="type" style="position: absolute; left: 4.5rem; width: 25px " value="plaintext" checked>
+                                </div>
+                                <div style="display: flex; flex-direction: row; align-items: center; position: relative;">
+                                    <label for="hexa" style="color: white;">Hexadecimal</label>
+                                    <input type="radio" id="hText" name="type" style="position: absolute; left: 7rem; width: 25px " value="hexa">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="key">
+                            <p style="color: white;">Key</p>
+                            <input id='key1' name="key1" type='text' value='' oninput='stringToHexadecimal1()'/>
+                        </div>
+                       </form>
+                       <div style="display: flex; justify-content: space-around; margin-top: 3rem;">
+                        <button type="button" class="closess" style="font-size: 16px; font-weight: 500; background: transparent; color: white; border: 1px solid skyblue;">Close</button>
+                        <button type="button" onclick="decryptDES()" class="dec" style="font-size: 16px; font-weight: 300; color: white; background-color: skyblue;" >Decrypt</button>
+                       </div>
+                     </div>
+                    </div>
+        </div>
+    </div>
+    <div>
+
+        <div  style="display: flex; align-items: center; justify-content: center; width: 100%;" >
+            <div style="background-image: url(../images/des-new-logo.jpeg); background-repeat: no-repeat; background-size: cover; color: white; padding: 3rem; width: 81%; border-radius: 20px;  box-shadow: 1px 1px 5px rgba(0,0,0,.1); height: 600px; margin-top: 30px;">
+                <div style="display: flex; justify-content: space-around; align-items: center; padding: 1rem">
+                    <div >
+                        <!-- <h3 style="font-size: 2.5rem;">Data Encryption Standard</h3> -->
+                        <!-- <p style="color: #DD1313">Guarding secrets with the symphony of symmetric-key security.</p><br /><br /><br /> -->
+                        <div class="des-btns1" style="margin-top: 10px;">
+                            <div class="des-btns ">
+                                <button id="myBtn" style="width: 300px;"><p class="btn-text">Encrypt</p></button>
+                                <button id="myBtnss" style="border: 1px solid skyblue; background: none; width: 300px;" ><p style="color: skyblue;" class="btn-text">Decrypt</p></button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div style="display: flex; align-items: center; justify-content: center; width: 100%; ">
+            <div class="container">
+                <h1 id="desType"></h1>
+                <div id='output'>
+
+                </div>
+                <div class="step8" style="margin-bottom: 20px;padding: 30px;" id="step8">
+                    <span id="textOutput" style="font-size: 15px; font-weight: 500; color: black; background-color:rgb(255, 196, 0);"></span>
+                    <div class="box8">
+                        <input id='ciphertext' style="width: 40rem; border: none; font-size: 2rem; outline: none; font-weight: bold;" type='text' value='' readonly/>
+                    </div>
+                </div>
+                <div class="step8" style="margin-bottom: 20px;padding: 30px; background-color: skyblue;" id="step9">
+                    <span id="textOutput1" style="font-size: 15px; font-weight: 500; color: black; background-color:rgb(255, 196, 0);"></span>
+                    <div class="box8">
+                        <input id='plaintext' style="width: 40rem; border: none; font-size: 2rem; outline: none; font-weight: bold;" type='text' value='' readonly/>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+    <!-- JAVASCRIPT CODE -->
+
+
+    <script>
+		// Get the modal
+		var modals = document.getElementById("myModals");
+
+		// Get the button that opens the modal
+		var btn = document.getElementById("myBtns");
+
+		// Get the <span> element that closes the modal
+		var span = document.getElementsByClassName("closes")[0];
+
+		// When the user clicks the button, open the modal
+		btn.onclick = function() {
+		  modals.style.display = "block";
+		}
+
+		// When the user clicks on <span> (x), close the modal
+		span.onclick = function() {
+		  modals.style.display = "none";
+		}
+
+		// When the user clicks anywhere outside of the modal, close it
+		window.onclick = function(event) {
+		  if (event.target == modals) {
+			modals.style.display = "none";
+		  }
+		}
+
+    </script>
+
+	<script>
+		var modal = document.getElementById("myModal");
+
+// Get the button that opens the modal
+		var btn = document.getElementById("myBtn");
+
+// Get the <span> element that closes the modal
+		var span = document.getElementsByClassName("close")[0];
+
+// When the user clicks the button, open the modal
+		btn.onclick = function() {
+		modal.style.display = "block";
+}
+
+// When the user clicks on <span> (x), close the modal
+		span.onclick = function() {
+		modal.style.display = "none";
+}
+	</script>
+
+	<script>
+		var modalss = document.getElementById("myModalss");
+        // Get the button that opens the modal
+            var btnss = document.getElementById("myBtnss");
+
+        // Get the <span> element that closes the modal
+        var spanss = document.getElementsByClassName("closess")[0];
+        spanss.onclick = function() {
+            modalss.style.display = "none";
+        }
+        // When the user clicks the button, open the modal
+            btnss.onclick = function() {
+            modalss.style.display = "block";
+        }
+
+
+
+        // When the user clicks on <span> (x), close the modal
+
+
+        // When the user clicks anywhere outside of the modal, close it
+	</script>
+
+	<script src="script1.js"></script>
+	<script src="script2.js"></script>
+
+	<!-- JAVASCRIPT CODE -->
+
+
+	<script>
+
+	</script>
+
+    <!-- <footer>
+        <p>&copy; 2024 Junard Villahermosa & Martin Beldeniza. All rights reserved.</p>
+    </footer> -->
+
+</body>
+</html>

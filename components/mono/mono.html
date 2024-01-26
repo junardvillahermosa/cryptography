@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="mono.css">
+    <title>Mono-alphabetic Calculator</title>
+</head>
+
+<body>
+    <header class="header-img">
+        <img src="../images/header5.png" alt="">
+
+    </header>
+    <header class="header-nav">
+        <div class="navigation">
+            <ul>
+                <li><a href="../index.html">back</a></li>
+            </ul>
+        </div>
+        <h2>Monoalphabetic Cipher Calculator</h2>
+        <div></div>
+
+    </header>
+
+    <div class="main-content" id="top">
+        <h1 id="viatext">Choose the Type of Encryption</h1>
+
+        <div class="cbox">
+            <label class="txtPT">Plain Text</label><br>
+            <textarea  id="plaintext" class="PT" cols="30" rows="10"></textarea>
+        </div>
+
+        <div class="cbox" id="keya">
+            <label class="txtPT" id="key1">Key</label>
+            <textarea id="keytext" class="key" cols="30" rows="10"></textarea>
+        </div>
+
+        <div class="cbox" id="keyb" style="display: none;">
+            <label class="txtPT">Key B</label>
+            <textarea id="bkey" class="key" cols="30" rows="10"></textarea>
+        </div>
+
+        <div class="typeofEncryption">
+            <select name="encryption" id="encryption">
+                <option value="toe">Type of Encryption</option>
+                <option value="kw">Keywords</option>
+                <option value="ct">Columnar Transposition</option>
+                <option value="af">Affine</option>
+            </select>
+        </div>
+
+        <div class="btns">
+            <button class="enter" onclick="Encrypt()">Enter</button>
+            <br>
+            <br>
+            <button class="encrypt" onclick="DecryptRef()">Decrypt</button>
+        </div>
+
+        <p class="forT" id="exp1"></p>
+        <table id="columntable" style="visibility: hidden; height: 0;">
+        </table>
+        <p class="forT" id="exp2"></p>
+        <table id="maintable">
+            <tr>
+                <td>A</td>
+                <td>B</td>
+                <td>C</td>
+                <td>D</td>
+                <td>E</td>
+                <td>F</td>
+                <td>G</td>
+                <td>H</td>
+                <td>I</td>
+                <td>J</td>
+                <td>K</td>
+                <td>L</td>
+                <td>M</td>
+                <td>N</td>
+                <td>O</td>
+                <td>P</td>
+                <td>Q</td>
+                <td>R</td>
+                <td>S</td>
+                <td>T</td>
+                <td>U</td>
+                <td>V</td>
+                <td>W</td>
+                <td>X</td>
+                <td>Y</td>
+                <td>Z</td>
+            </tr>
+            <tr id="keyTableRow">
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+        </table>
+        <p class="forT" id="exp3"></p>
+        <p class="forT" id="exp4"></p>
+
+        <input type="text" class="cm" id="encryptedtext" readonly>
+        <br>
+        <h3 class="forCT">Cipher Text</h3>
+
+
+    </div>
+
+
+
+
+    <footer>
+        <p>&copy; 2024 Junard Villahermosa & Martin Beldeniza. All rights reserved.</p>
+    </footer>
+
+    <script>
+            const keyTableRow = document.getElementById('keyTableRow');
+    const passkey = document.getElementById('keytext');
+    const passb = document.getElementById('bkey');
+    const plainkey = document.getElementById('plaintext');
+    const encryptionDropdown = document.getElementById('encryption');
+    const Exp1 = document.getElementById('exp1');
+    const Exp2 = document.getElementById('exp2');
+    const Exp3 = document.getElementById('exp3');
+    const Exp4 = document.getElementById('exp4');
+
+    function DecryptRef(){
+        location.href = "monodecrypt.html";
+    }
+
+    function addKeyToTable() {
+        // Get the key input
+        const keyInput = document.getElementById('keytext').value.toUpperCase();
+
+        // Clear previous content in the keyTableRow
+        keyTableRow.innerHTML = '';
+
+        // Use a Set to keep track of the letters that have been added
+        const addedLetters = new Set();
+
+        // Counter for the columns
+        let columnCount = 0;
+
+        // Add cells to the keyTableRow, limited to 26 columns
+        for (let i = 0; i < keyInput.length && columnCount < 26; i++) {
+            // Check if the letter has been added before
+            if (!addedLetters.has(keyInput[i])) {
+                const cell = document.createElement('td');
+                cell.textContent = keyInput[i];
+                // Add the letter to the Set to mark it as added
+                addedLetters.add(keyInput[i]);
+                // Increment the column count
+                columnCount++;
+                keyTableRow.appendChild(cell);
+            }
+        }
+
+        // Add the remaining alphabet letters in alphabetical order
+        for (let letterCode = 'A'.charCodeAt(0); letterCode <= 'Z'.charCodeAt(0); letterCode++) {
+            const letter = String.fromCharCode(letterCode);
+            // Check if the letter has been added before
+            if (!addedLetters.has(letter) && columnCount < 26) {
+                const cell = document.createElement('td');
+                cell.textContent = letter;
+                // Increment the column count
+                columnCount++;
+                keyTableRow.appendChild(cell);
+            }
+        }
+    }
+
+    function addMathOperationsToTable(a, b) {
+        // Convert a and b to integers if they are numbers or map letters to their numeric values
+        a = isNaN(a) ? a.toUpperCase().charCodeAt(0) - 'A'.charCodeAt(0) : parseInt(a);
+        b = isNaN(b) ? b.toUpperCase().charCodeAt(0) - 'A'.charCodeAt(0) : parseInt(b);
+
+        // Ensure that a is a positive integer
+        a = (a % 26 + 26) % 26;
+
+    // Get the key input
+    const ciphertext = plainkey.value.toUpperCase();
+
+    // Clear previous content in the keyTable
+    const keyTable = document.getElementById('columntable');
+    keyTable.innerHTML = '';
+
+    // Create the table headers row
+    const headersRow = keyTable.insertRow();
+    headersRow.insertCell().textContent = 'plaintext';
+    for (let i = 0; i < ciphertext.length; i++) {
+        headersRow.insertCell().textContent = ciphertext[i];
+    }
+
+    // Create the 'x' row based on the numeric values of the alphabet
+    const xRow = keyTable.insertRow();
+    xRow.insertCell().textContent = 'x';
+    for (let i = 0; i < ciphertext.length; i++) {
+        const letter = ciphertext[i];
+        xRow.insertCell().textContent = letter === ' ' ? ' ' : letter.charCodeAt(0) - 'A'.charCodeAt(0);
+    }
+
+    // Create the '(ax + b) mod 26' row
+    const axbRow = keyTable.insertRow();
+    axbRow.insertCell().textContent = `( ${a}x + ${b} ) mod 26`;
+    for (let i = 0; i < ciphertext.length; i++) {
+        const xValue = xRow.cells[i + 1].textContent;
+        const result = (a * parseInt(xValue) + b) % 26;
+        axbRow.insertCell().textContent = isNaN(result) ? ' ' : `${result}`;
+    }
+
+    // Create the 'ciphertext' row
+    const ciphertextRow = keyTable.insertRow();
+    ciphertextRow.insertCell().textContent = 'ciphertext';
+    for (let i = 0; i < ciphertext.length; i++) {
+        const xValue = xRow.cells[i + 1].textContent;
+        if (ciphertext[i] === ' ') {
+            ciphertextRow.insertCell().textContent = ' ';
+        } else {
+            const result = (a * parseInt(xValue) + b) % 26;
+            ciphertextRow.insertCell().textContent = isNaN(result) ? ' ' : String.fromCharCode(result + 'A'.charCodeAt(0));
+        }
+    }
+}
+
+    function addColumnToTable() {
+    // Get the key input
+    const keyInput = document.getElementById('keytext').value.toUpperCase();
+
+    // Clear previous content in the keyTable
+    const keyTable = document.getElementById('columntable');
+    keyTable.innerHTML = '';
+
+    // Use a Set to keep track of the letters that have been added
+    const addedLetters = new Set();
+
+    // Create the first row with unique letters from the keyInput
+    const firstRow = keyTable.insertRow();
+
+    // Loop through the keyInput and add unique letters to the first row
+    for (let i = 0; i < keyInput.length; i++) {
+        const letter = keyInput[i];
+
+        // Check if the letter has been added before
+        if (!addedLetters.has(letter) && letter >= 'A' && letter <= 'Z') {
+            // Create a cell and add the letter to the first row
+            const cell = firstRow.insertCell();
+            cell.textContent = letter;
+
+            // Add the letter to the addedLetters Set
+            addedLetters.add(letter);
+        }
+    }
+
+    // Create a string with the remaining alphabet letters
+    const remainingAlphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+        .split('')
+        .filter(letter => !addedLetters.has(letter))
+        .join('');
+
+    // Fill the remaining rows with the remaining alphabet letters
+    for (let i = 0; i < remainingAlphabet.length; i++) {
+        const row = keyTable.insertRow();
+
+        // Loop through the letters in the first column and add them to the current row
+        for (let j = 0; j < firstRow.cells.length; j++) {
+            const alphabetLetter = remainingAlphabet[i * firstRow.cells.length + j];
+
+            // Check if the letter is in the keyInput or has been added before
+            if (alphabetLetter) {
+                // Create a cell and add the letter to the row
+                const cell = row.insertCell();
+                cell.textContent = alphabetLetter;
+
+                // Add the alphabet letter to the addedLetters Set
+                addedLetters.add(alphabetLetter);
+            }
+        }
+    }
+    // Get all the letters from keyTable and put them into keyTableRow
+const keyTableRow = document.getElementById('keyTableRow');
+const keyTableLetters = Array.from(keyTable.querySelectorAll('td')).map(cell => cell.textContent);
+
+// Clear previous content in keyTableRow
+keyTableRow.innerHTML = '';
+
+// Calculate the number of rows in keyTable
+const numRows = keyTable.rows.length;
+
+// Calculate the number of columns in keyTable
+const numCols = keyTable.rows[0].cells.length;
+
+// Arrange the letters in keyTableRow based on rows
+for (let col = 0; col < numCols; col++) {
+    for (let row = 0; row < numRows; row++) {
+        const index = row * numCols + col;
+        if (keyTableLetters[index]) {
+            const cell = keyTableRow.insertCell();
+            cell.textContent = keyTableLetters[index];
+        }
+    }
+}
+}
+
+function encryptText() {
+    // Get the plaintext and keytext values
+    const plaintext = document.getElementById('plaintext').value.toUpperCase();
+
+    // Create a mapping for each letter in the alphabet to its corresponding letter in the keyTableRow
+    const alphabetToKey = {};
+    const alphabetCells = keyTableRow.querySelectorAll('td');
+
+    // Create a mapping from the original order of the alphabet to the corresponding letters in keyTableRow
+    for (let i = 0; i < alphabetCells.length; i++) {
+        const letter = String.fromCharCode('A'.charCodeAt(0) + i);
+        alphabetToKey[letter] = alphabetCells[i].textContent;
+    }
+
+    // Encrypt the plaintext using the table
+    let encryptedText = '';
+    for (let i = 0; i < plaintext.length; i++) {
+        const letter = plaintext[i];
+        if (letter === ' ') {
+            // If it's a space, simply append it to the encrypted text
+            encryptedText += letter;
+        } else if (alphabetToKey.hasOwnProperty(letter)) {
+            // Apply encryption formula to non-space characters
+            encryptedText += alphabetToKey[letter];
+        } else {
+            // Skip characters not present in the key
+            // encryptedText += letter;
+        }
+    }
+
+    // Display the result in the "encryptedtext" input field
+    document.getElementById('encryptedtext').value = encryptedText;
+}
+
+function encryptMessage(msg, a, b) {
+    // Convert a and b to integers if they are numbers or map letters to their numeric values
+    a = isNaN(a) ? a.toUpperCase().charCodeAt(0) - 'A'.charCodeAt(0) : parseInt(a);
+    b = isNaN(b) ? b.toUpperCase().charCodeAt(0) - 'A'.charCodeAt(0) : parseInt(b);
+
+    console.log(a);
+    console.log(a);
+
+    // Ensure that a is a positive integer
+    a = (a % 26 + 26) % 26;
+
+    // Cipher text initially empty
+    let cipher = "";
+
+    for (let i = 0; i < msg.length; i++) {
+        // Applying encryption formula (a x + b) mod m
+        // Here x is msg[i] and m is 26, and added 'A' to bring it in range of ASCII alphabet [65-90 | A-Z]
+        if (msg[i] === ' ') {
+            // If it's a space, simply append it to the encrypted text
+            cipher += ' ';
+        } else {
+            cipher += String.fromCharCode((((a * (msg[i].toUpperCase().charCodeAt(0) - 'A'.charCodeAt(0))) + b) % 26 + 26) % 26 + 'A'.charCodeAt(0));
+        }
+    }
+
+    return cipher;
+}
+
+    function toorig(){
+        document.getElementById('keyb').style.display = "none";
+        document.getElementById('key1').innerHTML = "Key";
+    }
+
+    function cleartable(){
+        document.getElementById('columntable').innerHTML = '';
+        document.getElementById('columntable').style.visibility = "hidden";
+        document.getElementById('columntable').style.height = "0";
+
+
+        keyTableRow.innerHTML = '';
+        for (let i = 0; i < 26; i++) {
+            const cell = document.createElement('td');
+            keyTableRow.appendChild(cell);
+        }
+
+        passkey.value = "";
+        passb.value = "";
+        document.getElementById('encryptedtext').value = "";
+    }
+
+    function addnumbers(){
+        for (var i = 0; i < 26; i++) {
+            keyTableRow.children[i].innerHTML = i;
+        }
+    }
+
+    function emptyexp(){
+        Exp1.innerHTML = '';
+        Exp2.innerHTML = '';
+        Exp3.innerHTML = '';
+        Exp4.innerHTML = '';
+    }
+
+    let keyexp1 = "<strong>Step 1:</strong> Assign the letters of the keyword to each letter of the alphabet. In case of having two or more letters that are the same in the keyword, just stick to its first value and proceed to listing the rest of the letters of the alphabet in alphabetical order without repeating any letters.";
+    let keyexp2 = "<strong>Step 2:</strong> Substitute the letter of the Plaintext to its corresponding letter in the table to get the Cipher Text.";
+    let ctexp1 = "<strong>Step 1:</strong> Assign the letters of the keyword to each column of the table. That would determine the number of columns. If the keyword contains two or more identical letters, just assign the first occurrence of the letter and skip the rest.";
+    let ctexp2 = "<strong>Step 2:</strong> Start the second row of the table by putting the letters of the alphabet, the table ends after every letter is present. In case the letter is already present in the keyword, just skip it and proceed to the next letter.";
+    let ctexp3 = "<strong>Step 3:</strong> Write the letters from the table starting from the first column and assign them to each letter of the alphabet.";
+    let ctexp4 = "<strong>Step 4:</strong> Substitute the letter of the plaintext for its corresponding letter equivalent on the key.";
+    let afexp1 = "<strong>Step 1:</strong> Assign the letters of the alphabet to its corresponding numeric equivalent. Refer to the table below. In the case of the Key A or B having letter as the key, refer to the table for the equivalent number.";
+    let afexp2 = "<strong>Step 2:</strong> Calculate each characters of the Cipher Text using the formula (ax + b) mod 26. Refer to the third column in the 1st table.";
+    let afexp3 = "<strong>Step 3:</strong> Assign each of the numbers to its corresponding alphabet in the table to get the Cipher Text.";
+
+    const encryptionTypeElement = document.getElementById('viatext');
+
+    // Add an event listener to the dropdown
+    encryptionDropdown.addEventListener('change', function () {
+        // Update the text content based on the selected value
+        switch (encryptionDropdown.value) {
+            case 'kw':
+                encryptionTypeElement.textContent = 'Via Keywords';
+                cleartable();
+                toorig();
+                emptyexp();
+                break;
+            case 'ct':
+                encryptionTypeElement.textContent = 'Via Columnar Transposition';
+                cleartable();
+                toorig();
+                document.getElementById('columntable').style.visibility = "visible";
+                document.getElementById('columntable').style.height = "auto";
+                emptyexp();
+                break;
+            case 'af':
+                encryptionTypeElement.textContent = 'Via Affine Cipher';
+                document.getElementById('key1').innerHTML = "Key A";
+                document.getElementById('keyb').style.display = "block";
+                passkey.value = "";
+                cleartable();
+                emptyexp();
+                break;
+            default:
+                encryptionTypeElement.textContent = 'Choose the Type of Encryption';
+                passkey.value = "";
+                plainkey.value = "";
+                passb.value = "";
+                document.getElementById('encryptedtext').value = "";
+                cleartable();
+                toorig();
+                emptyexp();
+                break;
+        }
+
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    function Encrypt(){
+        switch(encryptionDropdown.value){
+            case 'kw':
+                if(plainkey.value == "" || passkey.value == ""){
+                    alert('Please enter both the Keyword and Plain Text.');
+                }
+                else{
+                    addKeyToTable();
+                    encryptText();
+                    Exp1.innerHTML = keyexp1;
+                    Exp3.innerHTML = keyexp2;
+                }
+                break;
+            case 'ct':
+                if(plainkey.value == "" || passkey.value == ""){
+                    alert('Please enter both the Keyword and Plain Text.');
+                }
+                else{
+                    document.getElementById('columntable').style.visibility = "visible";
+                    document.getElementById('columntable').style.height = "auto";
+                    addColumnToTable();
+                    encryptText();
+                    Exp1.innerHTML = ctexp1;
+                    Exp2.innerHTML = ctexp2;
+                    Exp3.innerHTML = ctexp3;
+                    Exp4.innerHTML = ctexp4;
+                }
+                break;
+            case 'af':
+                if(plainkey.value == "" || passkey.value == "" || passb == ""){
+                    alert('Please enter both Keywords and Plain Text.');
+                }
+                else{
+                    document.getElementById('columntable').style.visibility = "visible";
+                    document.getElementById('columntable').style.height = "auto";
+                    document.getElementById('encryptedtext').value = encryptMessage(plainkey.value,passkey.value,passb.value);
+                    addMathOperationsToTable(passkey.value, passb.value);
+                    addnumbers();
+                    Exp2.innerHTML = afexp1;
+                    Exp3.innerHTML = afexp2;
+                    Exp4.innerHTML = afexp3;
+                }
+                break;
+            default:
+                alert("Choose the type of encryption");
+                break;
+        }
+    }
+
+    </script>
+</body>
+</html>

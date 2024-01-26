@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="aes.css">
+    <script src="index.js"></script>
+    <script src="tablesaes.js"></script>
+    <title>Advanced Encryption Standard Calculator</title>
+</head>
+
+<body>
+    <header class="header-img">
+        <img src="../images/header5.png" alt="">
+
+    </header>
+
+    <header class="header-nav">
+        <div class="navigation">
+            <ul>
+                <li><a href="../index.html">back</a></li>
+            </ul>
+        </div>
+        <h2>Advanced Encryption Standard Calculator</h2>
+        <div></div>
+    </header>
+
+    <!-- AES CODE -->
+
+    <br/>
+    <br/>
+    <center>
+        <div style="width: 1000px;
+         height: auto;
+        background-image: url(../images/header7.jpeg);
+        background-repeat: no-repeat;
+        background-size: cover;
+         color: white;
+         text-align: center;
+         border-radius: 10px;
+         box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);">
+
+
+            <br/>
+            <br/>
+                <strong>
+                    <label style="font-size: 25px;">Enter Plaintext for Encryption:</label>
+                </strong>
+                    <input type="text" id="encryptionPlaintext" style="color:green;width: 400px; height: 40px; padding: 10px; font-family: Georgia, serif; font-size: 16px; border: 1px solid #ccc; border-radius: 5px;" placeholder="Enter plaintext for encryption"/>
+                <br/>
+                <br/>
+                <strong>
+                    <label style="font-size: 25px;padding-left: 50px">Enter Key for Encryption:</label>
+                </strong>
+                     <input type="text" id="encryptionKey" placeholder="Enter key for encryption" style="color:red;padding-left: 50px; width: 400px; height: 40px; padding: 10px; font-family: Georgia, serif; font-size: 16px; border: 1px solid #ccc; border-radius: 5px;"/>
+                <br/>
+                <br/>
+                <strong>
+                  <button onclick="encrypt()" class="encryptButton">Encrypt</button>
+                </strongs>
+                <br/>
+                <br/>
+                <strong>
+                <button onclick="clearencryptDetails()" class="clearButton">Clear Details</button>
+                <strong>
+                    <hr style="margin-top: 10px;">
+
+            <label for="encryptionResult">Encryption Result:</label>
+            <br/>
+            <br/>
+            <span id="encryptionResult" style="font-size: 40px;"></span>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <a href="ecbsolution.html" target="_blank" style="color: white;">Click Here to Solve With Solution</a>
+        </div>
+    </center>
+    <br/>
+    <br/>
+
+
+
+    <center>
+        <div style="width: 1000px;
+        height: auto;
+        margin-bottom: 50px;
+        background-image: url(../images/header7.jpeg);
+        background-repeat: no-repeat;
+        background-size: cover;
+        color: white;
+        text-align: center;
+        border-radius: 10px;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);">
+
+
+            <br/>
+            <br/>
+                <strong>
+                <label style="font-size: 25px;">Enter Ciphertext for Decryption (in hex):</label>
+                </strong>
+                <input type="text" id="decryptionCiphertext" style="color:green;width: 400px; height: 40px; padding: 10px; font-family: Georgia, serif; font-size: 16px; border: 1px solid #ccc; border-radius: 5px;" placeholder="Enter ciphertext for decryption (hex format)"/>
+                <br/>
+                <br/>
+                <strong>
+                    <label style="font-size: 25px;padding-left: 50px">Enter Key for Decryption (plaintext):</label>
+                </strong>
+                <input type="text" id="decryptionKey" placeholder="Enter key for decryption" style="color:red;padding-left: 50px; width: 400px; height: 40px; padding: 10px; font-family: Georgia, serif; font-size: 16px; border: 1px solid #ccc; border-radius: 5px;"/>
+                <br/>
+                <br/>
+                <strong>
+                <button onclick="decrypt()" class="decryptButton">Decrypt</button>
+                </strongs>
+                <br/>
+                <br/>
+                <strong>
+                <button onclick="cleardecryptDetails()" class="clearButton">Clear Details</button>
+                <strong>
+
+                <hr style="margin-top: 10px;">
+                <label for="decryptionResult">Decryption Result:</label>
+                <br/>
+                <br/>
+            <span id="decryptionResult" style="font-size: 60px; font-style: italic;"></span>
+            <br>
+            <br>
+            <br>
+            <br>
+            <a href="decryptscratch.html" target="_blank" style="color: white;">Click Here to View Solution</a>
+            <br>
+
+        </div>
+    </center>
+    <br/>
+    <br/>
+
+    <!-- JAVACRIPT CODE -->
+
+    <script>
+        function encrypt() {
+            var plaintext = document.getElementById("encryptionPlaintext").value;
+            var key = document.getElementById("encryptionKey").value;
+
+            // Convert key to bytes
+            var keyBytes = aesjs.utils.utf8.toBytes(key);
+
+            // Check if the key length is 16 bits
+            if (key.length !== 16) {
+                alert("Key must be 16 bytes (128 bits) long.");
+                return;
+            }
+
+             // Check if the key length is 16 bits
+             if (plaintext.length !== 16) {
+                alert("Key must be 16 bytes (128 bits) long.");
+                return;
+            }
+
+
+
+
+            // Create an instance of AES
+            var aesInstance = new aesjs.AES(keyBytes);
+
+            // Convert text to bytes
+            var textBytes = aesjs.utils.utf8.toBytes(plaintext);
+
+            var aesEcb = new aesjs.ModeOfOperation.ecb(keyBytes);
+            var encryptedBytes = aesEcb.encrypt(textBytes);
+
+            // To print or store the binary data, you may convert it to hex
+            var encryptedHex = aesjs.utils.hex.fromBytes(encryptedBytes);
+            document.getElementById("encryptionResult").innerText = encryptedHex;
+            // Print key expansion to console
+
+        }
+
+        function decrypt() {
+            var ciphertextHex = document.getElementById("decryptionCiphertext").value;
+            var key = document.getElementById("decryptionKey").value;
+
+            // Convert key to bytes
+            var keyBytes = aesjs.utils.utf8.toBytes(key);
+
+            // Check if the key length is 16 bits
+            if (ciphertextHex.length !== 32) {
+                alert("Ciphertext must be 32 bytes long.");
+                return;
+            }
+
+            // Check if the key length is 16 bits
+            if (key.length !== 16) {
+                alert("Decryption key must be text or must be 16 bytes (128 bits) long.");
+                return;
+            }
+
+            // Create an instance of AES
+            var aesInstance = new aesjs.AES(keyBytes);
+
+            // Convert hex ciphertext to bytes
+            var ciphertextBytes = aesjs.utils.hex.toBytes(ciphertextHex);
+
+            var aesEcb = new aesjs.ModeOfOperation.ecb(keyBytes);
+            var decryptedBytes = aesEcb.decrypt(ciphertextBytes);
+
+            // Convert our bytes back into text
+            var decryptedText = aesjs.utils.utf8.fromBytes(decryptedBytes);
+            document.getElementById("decryptionResult").innerText = decryptedText;
+        }
+        // clear button for encryption
+
+        function clearencryptDetails()
+        {
+            // Clear input fields and result span
+            document.getElementById("encryptionPlaintext").value = "";
+            document.getElementById("encryptionKey").value = "";
+            document.getElementById("encryptionResult").innerText = "";
+        }
+
+        function cleardecryptDetails()
+        {
+            // Clear input fields and result span
+            document.getElementById("decryptionCiphertext").value = "";
+            document.getElementById("decryptionKey").value = "";
+            document.getElementById("decryptionResult").innerText = "";
+        }
+    </script>
+
+
+    <footer>
+        <p>&copy; 2024 Junard Villahermosa & Martin Beldeniza. All rights reserved.</p>
+    </footer>
+
+
+
+</body>
+</html>

@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="poly.css">
+    <title>Poly-alphabetic Calculator</title>
+</head>
+
+<body>
+    <header class="header-img">
+        <img src="../images/header5.png" alt="">
+
+    </header>
+
+    <header class="header-nav">
+        <div class="navigation">
+            <ul>
+                <li><a href="../index.html">back</a></li>
+
+            </ul>
+        </div>
+        <h2>Polyalphabetic Cipher Calculator</h2>
+        <div></div>
+
+    </header>
+
+    <!-- POLY CODE -->
+<main>
+
+
+    <div class="container">
+        <section class="calculator">
+          <form id="cipherForm">
+            <label for="plaintext">Enter Plaintext:</label>
+            <input type="text" id="plaintext" placeholder="Enter your message" required>
+
+            <label for="keyword">Enter Keyword:</label>
+            <input type="text" id="keyword" placeholder="Enter your keyword" required>
+
+            <label for="operation">Choose Operation:</label>
+            <select id="operation" required style="height: 40px;">
+              <option value="encryption">Encryption</option>
+              <option value="decryption">Decryption</option>
+            </select>
+
+            <label for="method">Choose Method:</label>
+            <select id="method" required style="height: 40px;">
+              <option value="polyalphabetic">Polyalphabetic Cipher</option>
+              <option value="vigenere">Vigenère Cipher</option>
+              <option value="playfair">Playfair Cipher</option>
+            </select>
+
+              <button type="button" onclick="calculate()">CALCULATE</button>
+              <button onclick="clearText()" style="background: maroon;">CLEAR</button>
+
+
+          </form>
+          <h3 style="color: white;">Process\Result: </h3>
+          <div id="result" class="result-box" style="height: 1000px; overflow-y: scroll;"></div>
+          <div id="outputArea">
+            <!-- Output text here -->
+        </div>
+        </section>
+      </div>
+</main>
+
+    <!-- JAVASCRIPT CODE -->
+
+    <script>
+
+function calculate() {
+    const plaintext = document.getElementById('plaintext').value.toUpperCase().replace(/[^A-Z]/g, '');
+    const keyword = document.getElementById('keyword').value.toUpperCase().replace(/J/g, 'I').replace(/[^A-Z]/g, '');
+    const operation = document.getElementById('operation').value;
+    const method = document.getElementById('method').value;
+    let result = '';
+
+    if (method === 'polyalphabetic') {
+      if (operation === 'encryption') {
+        result = polyalphabeticEncryption(plaintext, keyword);
+      } else if (operation === 'decryption') {
+        result = polyalphabeticDecryption(plaintext, keyword);
+      }
+    } else if (method === 'vigenere') {
+      if (operation === 'encryption') {
+        result = vigenereEncryption(plaintext, keyword);
+      } else if (operation === 'decryption') {
+        result = vigenereDecryption(plaintext, keyword);
+      }
+    } else if (method === 'playfair') {
+      if (operation === 'encryption') {
+        result = playfairEncryption(plaintext, keyword);
+      } else if (operation === 'decryption') {
+        result = playfairDecryption(plaintext, keyword);
+      }
+    }
+
+    document.getElementById('result').innerHTML = result;
+  }
+  function clearAll() {
+    // Clear input fields
+    document.getElementById('plaintext').value = '';
+    document.getElementById('keyword').value = '';
+
+    // Clear output area or any other output elements
+    document.getElementById('outputArea').innerHTML = '';
+
+}
+  function polyalphabeticEncryption(plaintext, keyword) {
+    let result = "<h3 >Polyalphabetic Cipher Encryption Steps:</h3><br>";
+    result += `<p><h3 style="color: red">Note: </h3>When the plaintext is longer than the keyword in the Vigenère cipher, the keyword is repeated to match the length of the plaintext. This process of repeating the keyword allows for the encryption of the entire plaintext message.<p><br> `;
+    let encryptedText = '';
+    const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+    // Add the alphabet table
+    result += "<table border='1' style='width:30%; text-align: center; margin-bottom: 10px;'>";
+    result += "<tr>";
+    for (let i = 0; i < 26; i++) {
+        result += `<td>${alphabet.charAt(i)}</td>`;
+    }
+    result += "</tr>";
+    result += "<tr>";
+    for (let i = 0; i < 26; i++) {
+        result += `<td>${i}</td>`;
+    }
+    result += "</tr>";
+    result += "</table><br>";
+
+    result += `<p><h3>Convert Text to Numbers:</h3> Use the table to convert each letter in the plaintext to its numerical equivalent.</p>`
+    result += `<p><h3>Convert Key to Numbers:</h3> Do the same for the keyword.</p>`
+    result += `<p><h3>Encrypt:</h3> Add the numerical values of each letter in the plaintext to the numerical values of the corresponding letters in the keyword. Apply modulo 26 to keep the values within the range 0 to 25. </p><br>`
+
+    for (let i = 0; i < plaintext.length; i++) {
+        const char = plaintext.charAt(i);
+        const charCode = char.charCodeAt(0) - 65;
+        const keyChar = keyword.charAt(i % keyword.length);
+        const keyCharCode = keyChar.charCodeAt(0) - 65;
+        const encryptedCharCode = (charCode + keyCharCode) % 26 + 65;
+        encryptedText += `<span style="color: blue">${String.fromCharCode(encryptedCharCode)}</span>`;
+        result += `<p>${i + 1}. Encrypt ${char} with ${keyChar}: (${charCode} + ${keyCharCode}) % 26 = ${(charCode + keyCharCode) % 26} => <span style="color: blue">${String.fromCharCode(encryptedCharCode)}</span></p> `;
+    }
+    result += `<p><strong>Encrypted Text:</strong> ${encryptedText}</p>`;
+    return result;
+}
+
+function polyalphabeticDecryption(ciphertext, keyword) {
+    let result = "<h3>Polyalphabetic Cipher Decryption Steps:</h3><br>";
+    result += `<p><h3 style="color: red">Note: </h3>When the plaintext is longer than the keyword in the Vigenère cipher, the keyword is repeated to match the length of the plaintext. This process of repeating the keyword allows for the encryption of the entire plaintext message.<p> <br> `;
+    let decryptedText = '';
+    const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+    // Add the alphabet table
+    result += "<table border='1' style='width:30%; text-align: center; margin-bottom: 10px;'>";
+
+    result += "<tr>";
+
+    for (let i = 0; i < 26; i++) {
+        result += `<td>${alphabet.charAt(i)}</td>`;
+    }
+    result += "</tr>";
+    result += "<tr>";
+    for (let i = 0; i < 26; i++) {
+        result += `<td>${i}</td>`;
+    }
+    result += "</tr>";
+    result += "</table><br>";
+
+    result += `<p><h3>Convert Ciphertext to Numbers:</h3> Use the table to convert each letter in the cipher text to its numerical equivalent.</p>`
+    result += `<p><h3>Convert Key to Numbers:</h3> Convert the keyword letters to their numerical equivalents.</p>`
+    result += `<p><h3>Decrypt:</h3>  Subtract the numerical values of each letter in the encrypted message by the numerical values of the corresponding letters in the keyword. Apply modulo 26 to ensure the results are within the range of 0 to 25 </p><br>`
+
+    for (let i = 0; i < ciphertext.length; i++) {
+        const char = ciphertext.charAt(i);
+        const charCode = char.charCodeAt(0) - 65;
+        const keyChar = keyword.charAt(i % keyword.length);
+        const keyCharCode = keyChar.charCodeAt(0) - 65;
+        let decryptedCharCode = (charCode - keyCharCode);
+        if (decryptedCharCode < 0) {
+            decryptedCharCode += 26;
+        }
+        decryptedCharCode = decryptedCharCode + 65;
+        decryptedText += `<span style="color: red">${String.fromCharCode(decryptedCharCode)}</span>`;
+        result += `<p>${i + 1}. Decrypt ${char} with ${keyChar}: (${charCode} - ${keyCharCode}) % 26 = ${(charCode - keyCharCode) % 26} => <span style="color: red">${String.fromCharCode(decryptedCharCode)}</span></p>`;
+    }
+    result += `<p><strong>Decrypted Text:</strong> ${decryptedText}</p>`;
+    return result;
+}
+
+
+function vigenereEncryption(plaintext, keyword) {
+  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  let result = '';
+  let keyIndex = 0;
+  keyword = keyword.toUpperCase();
+  const encryptedLetters = [];
+
+  const generateVigenereTable = () => {
+      let table = '<h3>Vigenère Table:</h3><pre>';
+      for (let i = 0; i < 26; i++) {
+          let row = '';
+          for (let j = 0; j < 26; j++) {
+              row += alphabet[(i + j) % 26] + ' ';
+          }
+          table += row.trim() + '\n';
+      }
+      return table + '</pre>';
+  };
+
+  const vigenereTable = generateVigenereTable();
+  result += vigenereTable;
+
+  result += `<p><h3 style="color: red">Note: </h3>When the plaintext is longer than the keyword in the Vigenère cipher, the keyword is repeated to match the length of the plaintext. This process of repeating the keyword allows for the encryption of the entire plaintext message.<p> <br>`;
+  result += `<h3>Follow the steps below: </h3> <br>`;
+  for (let i = 0; i < plaintext.length; i++) {
+      const char = plaintext.charAt(i).toUpperCase();
+
+      if (char.match(/[A-Z]/)) {
+          const shift = alphabet.indexOf(keyword[keyIndex]);
+          const rowIndex = alphabet.indexOf(char);
+          const encryptedChar = alphabet[(rowIndex + shift) % 26];
+          result += `<h3>Vigenère Cipher Encryption for Plaintext letter ${char} and Keyword letter ${keyword[keyIndex]}:</h3>`;
+          result += `<p>Locate the plaintext letter ${char} found in the row of the table. While the keyword letter ${keyword[keyIndex]} is found in the column of the table.</p>`;
+          result += `<p>Then locate the intersection letter of the row and column, and that will be the Encrypted Letter.</p>`;
+          result += `<h4>Encrypted Letter: ${encryptedChar}</h4>`;
+          keyIndex = (keyIndex + 1) % keyword.length;
+          encryptedLetters.push(encryptedChar);
+
+      } else {
+          result += char;
+      }
+
+  }
+  result += '<h3>Encrypted Text:</h3>';
+  result += `<p style="color: blue">${encryptedLetters.join(' ')}</p>`;
+
+  return result;
+}
+function vigenereDecryption(ciphertext, keyword) {
+  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  let result = '';
+  let keyIndex = 0;
+  keyword = keyword.toUpperCase();
+  const decryptedLetters = [];
+
+  const generateVigenereTable = () => {
+      let table = '<h3>Vigenère Table:</h3><pre>';
+      for (let i = 0; i < 26; i++) {
+          let row = '';
+          for (let j = 0; j < 26; j++) {
+              row += alphabet[(i + j) % 26] + ' ';
+          }
+          table += row.trim() + '\n';
+      }
+      return table + '</pre>';
+  };
+
+  const vigenereTable = generateVigenereTable();
+  result += vigenereTable;
+
+  result += `<p><h3>Note: </h3>When the plaintext is longer than the keyword in the Vigenère cipher, the keyword is repeated to match the length of the plaintext. This process of repeating the keyword allows for the encryption of the entire plaintext message.<p><br> `;
+  result += `<h3>Follow the following steps: </h3><br> `;
+  for (let i = 0; i < ciphertext.length; i++) {
+      const char = ciphertext.charAt(i).toUpperCase();
+      if (char.match(/[A-Z]/)) {
+          const shift = alphabet.indexOf(keyword[keyIndex]);
+          const rowIndex = alphabet.indexOf(char);
+          const decryptedChar = alphabet[(rowIndex - shift + 26) % 26];
+          result += `<h3>Vigenère Cipher Decryption for Encrypted letter ${char} and Keyword letter ${keyword[keyIndex]}:</h3>`;
+          result += `<p>Locate the encrypted letter ${char} found in the row of the table. While the keyword letter ${keyword[keyIndex]} is found in the column of the table.</p>`;
+          result += `<p>Then locate the intersection letter of the row and column, and that will be the Encrypted Letter.</p>`;
+          result += `<h4>Encrypted Letter: ${decryptedChar}</h4>`;
+          keyIndex = (keyIndex + 1) % keyword.length;
+          decryptedLetters.push(decryptedChar)
+      } else {
+          result += char;
+      }
+  }
+  result += '<h3>Decrypted Text: </h3>';
+  result += `<p style="color: red">${decryptedLetters.join(' ')}</p>`;
+  return result;
+}
+
+  function playfairEncryption(plaintext, keyword) {
+    const prepareText = plaintext.replace(/J/g, 'I');
+    const square = generatePlayfairSquare(keyword);
+    let result = "<h3>Playfair Cipher Encryption Steps:</h3><br>";
+    let encryptedText = '';
+    result += `<h3>Key Setup: </h3><p>Create a 5x5 matrix (Playfair square) using a keyword without repeating letters, filling it with the remaining unique letters of the alphabet.</p>`;
+    result += `<h3>Text Preparation: </h3><p>Convert the plaintext into pairs of letters (digraphs), excluding duplicates and 'J' (combine with 'I').
+    Add a filler letter (usually 'X') at the end if the number of letters is odd.</p>`;
+    result += `<h3>Encrypting Digraphs:</h3><p>For each digraph: <br>
+    If the letters are in the same row, replace them with the letters to their right. <br>
+    If they are in the same column, replace them with the letters below.<br>
+    If they form a rectangle, replace them with the opposite corner letters on the same row.</p><br>`;
+    for (let i = 0; i < prepareText.length; i += 2) {
+      let char1 = prepareText.charAt(i);
+      let char2 = prepareText.charAt(i + 1) || 'X'; // If there's an odd number of letters, add an 'X'
+      let row1, col1, row2, col2;
+
+      for (let row = 0; row < 5; row++) {
+        for (let col = 0; col < 5; col++) {
+          if (square[row][col] === char1) {
+            row1 = row;
+            col1 = col;
+          }
+          if (square[row][col] === char2) {
+            row2 = row;
+            col2 = col;
+          }
+        }
+      }
+
+      let encryptedChars = '';
+
+      if (row1 === row2) {
+        encryptedChars += square[row1][(col1 + 1) % 5];
+        encryptedChars += square[row2][(col2 + 1) % 5];
+        result += `<p>Step ${i / 2 + 1}: Encrypt ${char1}-${char2} => ${encryptedChars}</p>`;
+      } else if (col1 === col2) {
+        encryptedChars += square[(row1 + 1) % 5][col1];
+        encryptedChars += square[(row2 + 1) % 5][col2];
+        result += `<p>Step ${i / 2 + 1}: Encrypt ${char1}-${char2} => ${encryptedChars}</p>`;
+      } else {
+        encryptedChars += square[row1][col2];
+        encryptedChars += square[row2][col1];
+        result += `<p>Step ${i / 2 + 1}: Encrypt ${char1}-${char2} => ${encryptedChars}</p>`;
+      }
+
+      encryptedText += encryptedChars;
+      result += generateMatrixDisplay(square);
+    }
+
+    result += `<p><strong>Encrypted Text:</strong> ${encryptedText}</p>`;
+    return result;
+  }
+
+  function playfairDecryption(ciphertext, keyword) {
+    const prepareText = ciphertext.replace(/J/g, 'I');
+    const square = generatePlayfairSquare(keyword);
+    let result = "<h3>Playfair Cipher Decryption Steps:</h3><br>";
+    let decryptedText = '';
+
+    result += `<h3>Key Setup: </h3><p>Use the same keyword to reconstruct the 5x5 matrix.</p>`;
+    result += `<h3>Decrypting Digraphs: </h3><p>For each digraph in the ciphertext:<br>
+    Apply the reverse of the encryption rules.<br>
+    If the letters are in the same row, replace them with the letters to their left.<br>
+    If they are in the same column, replace them with the letters above.<br>
+    If they form a rectangle, replace them with the opposite corner letters on the same row.</p>`;
+    result += `<h3>Text Restoration:</h3><p>Combine the decrypted digraphs to obtain the plaintext.</p><br>`;
+
+    for (let i = 0; i < prepareText.length; i += 2) {
+      let char1 = prepareText.charAt(i);
+      let char2 = prepareText.charAt(i + 1) || 'X'; // If there's an odd number of letters, add an 'X'
+      let row1, col1, row2, col2;
+
+      for (let row = 0; row < 5; row++) {
+        for (let col = 0; col < 5; col++) {
+          if (square[row][col] === char1) {
+            row1 = row;
+            col1 = col;
+          }
+          if (square[row][col] === char2) {
+            row2 = row;
+            col2 = col;
+          }
+        }
+      }
+
+      let decryptedChars = '';
+
+      if (row1 === row2) {
+        decryptedChars += square[row1][(col1 + 4) % 5];
+        decryptedChars += square[row2][(col2 + 4) % 5];
+        result += `<p>Step ${i / 2 + 1}: Decrypt ${char1}-${char2} => ${decryptedChars}</p>`;
+      } else if (col1 === col2) {
+        decryptedChars += square[(row1 + 4) % 5][col1];
+        decryptedChars += square[(row2 + 4) % 5][col2];
+        result += `<p>Step ${i / 2 + 1}: Decrypt ${char1}-${char2} => ${decryptedChars}</p>`;
+      } else {
+        decryptedChars += square[row1][col2];
+        decryptedChars += square[row2][col1];
+        result += `<p>Step ${i / 2 + 1}: Decrypt ${char1}-${char2} => ${decryptedChars}</p>`;
+      }
+
+      decryptedText += decryptedChars;
+      result += generateMatrixDisplay(square);
+    }
+
+    result += `<p><strong>Decrypted Text:</strong> ${decryptedText}</p>`;
+    return result;
+  }
+
+  function generatePlayfairSquare(keyword) {
+    const alphabet = 'ABCDEFGHIKLMNOPQRSTUVWXYZ';
+    const key = removeDuplicates(keyword + alphabet).replace(/J/g, 'I');
+    let square = [];
+
+    for (let i = 0; i < key.length; i += 5) {
+      square.push(key.slice(i, i + 5).split(''));
+    }
+
+    return square;
+  }
+
+  function removeDuplicates(str) {
+    return str
+      .split('')
+      .filter((item, index, self) => self.indexOf(item) === index)
+      .join('');
+  }
+
+  function generateMatrixDisplay(square) {
+    let matrixDisplay = '<p><strong>Matrix:</strong></p>';
+    matrixDisplay += '<table>';
+
+    for (let i = 0; i < 5; i++) {
+      matrixDisplay += '<tr>';
+      for (let j = 0; j < 5; j++) {
+        matrixDisplay += `<td>${square[i][j]}</td>`;
+      }
+      matrixDisplay += '</tr>';
+    }
+
+    matrixDisplay += '</table>';
+    return matrixDisplay;
+  }
+  function operationSelectionChanged() {
+    const operation = document.getElementById('operationSelect').value;
+    const inputTextLabel = document.getElementById('inputTextLabel');
+
+    if (operation === 'Encryption') {
+      inputTextLabel.textContent = 'Plaintext:';
+    } else if (operation === 'Decryption') {
+      inputTextLabel.textContent = 'Encrypted Text:';
+    }
+  }
+
+
+    </script>
+
+    <footer>
+        <p>&copy; 2024 Junard Villahermosa & Martin Beldeniza. All rights reserved.</p>
+    </footer>
+
+</body>
+</html>
